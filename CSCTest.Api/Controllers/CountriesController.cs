@@ -1,13 +1,10 @@
-﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSCTest.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class ValuesController : Controller
+    public class CountriesController : Controller
     {
         // GET api/values
         [HttpGet]
@@ -35,7 +32,11 @@ namespace CSCTest.Api.Controllers
         {
         }
 
-        // DELETE api/values/5
+        /// <summary>
+        /// Delete Country
+        /// </summary>
+        /// <remarks>Delete country by id.</remarks>
+        /// <param name="id"></param>
         [HttpDelete("{id}")]
         public void Delete(int id)
         {

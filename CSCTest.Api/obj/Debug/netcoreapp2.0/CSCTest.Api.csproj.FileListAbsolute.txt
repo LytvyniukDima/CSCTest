@@ -1,0 +1,11 @@
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\bin\Debug\netcoreapp2.0\CSCTest.Api.deps.json
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\bin\Debug\netcoreapp2.0\CSCTest.Api.runtimeconfig.json
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\bin\Debug\netcoreapp2.0\CSCTest.Api.runtimeconfig.dev.json
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\bin\Debug\netcoreapp2.0\CSCTest.Api.dll
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\bin\Debug\netcoreapp2.0\CSCTest.Api.pdb
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\obj\Debug\netcoreapp2.0\CSCTest.Api.csproj.CoreCompileInputs.cache
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\obj\Debug\netcoreapp2.0\CSCTest.Api.AssemblyInfoInputs.cache
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\obj\Debug\netcoreapp2.0\CSCTest.Api.AssemblyInfo.cs
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\obj\Debug\netcoreapp2.0\CSCTest.Api.dll
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\obj\Debug\netcoreapp2.0\CSCTest.Api.pdb
+F:\C\DIMA\Projects\CSCTest\CSCTest\CSCTest.Api\bin\Debug\netcoreapp2.0\CSCTestComments.xml
