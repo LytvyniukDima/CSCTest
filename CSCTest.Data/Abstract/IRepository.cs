@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CSCTest.Data.Abstract
 {
-    public interface IRepository<T> where T : class, IEntity
+    public interface IRepository<T> where T : class
     {
         IEnumerable<T> GetAll();
         Task<IEnumerable<T>> GetAllAsync();

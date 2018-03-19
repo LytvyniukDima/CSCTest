@@ -1,9 +1,8 @@
 using System.Collections.Generic;
-using CSCTest.Data.Abstract;
 
 namespace CSCTest.Data.Entities
 {
-    public class Country : IEntity
+    public class Country
     {
         public int Id { get; set; }
         public string Name { get; set; }

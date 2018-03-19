@@ -1,12 +1,9 @@
 using System.Collections.Generic;
-using CSCTest.Data.Abstract;
 
 namespace CSCTest.Data.Entities
 {
-    public class CountryBusiness : IEntity
+    public class CountryBusiness
     {
-        public int Id { get; set; }
-
         public int OrganizationCountryId { get; set; }
         public OrganizationCountry OrganizationCountry { get; set; }
 
