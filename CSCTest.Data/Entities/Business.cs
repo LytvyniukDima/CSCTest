@@ -3,12 +3,11 @@ using CSCTest.Data.Abstract;
 
 namespace CSCTest.Data.Entities
 {
-    public class Country : IEntity
+    public class Business : IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int Code { get; set; }
 
-        public ICollection<OrganizationCountry> OrganizationCountries { get; set; }
+        public ICollection<CountryBusiness> CountryBusinesses { get; set; }
     }
 }
