@@ -4,6 +4,7 @@ namespace CSCTest.Data.Entities
 {
     public class OrganizationCountry
     {
+        public int Id { get; set; }
         public int OrganizationId { get; set; }
         public Organization Organization { get; set; }
 

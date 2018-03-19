@@ -11,5 +11,6 @@ namespace CSCTest.Data.Entities
         public Business Business { get; set; }
 
         public ICollection<BusinessFamily> BusinessFamilies { get; set; }
+        public ICollection<Offering> Offerings { get; set; }
     }
 }
