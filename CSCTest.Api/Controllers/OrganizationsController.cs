@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSCTest.Api.Controllers
 {
     [Route("api/organizations")]
+    [Authorize]
     public class OrganizationsController : Controller
     {
         private readonly IOrganizationService organizationService;
@@ -29,7 +31,6 @@ namespace CSCTest.Api.Controllers
             return "value";
         }
 
-        // POST api/values
         [HttpPost]
         public void Post([FromBody]string value)
         {
