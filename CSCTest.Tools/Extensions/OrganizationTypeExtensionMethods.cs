@@ -22,5 +22,24 @@ namespace CSCTest.Tools.Extensions
                     return "Other";
             }
         }
+
+        public static OrganizationType GetOrganizationType(this string organizationType)
+        {
+            switch (organizationType)
+            {
+                case "General Partnership":
+                    return OrganizationType.GeneralPartnership;
+                case "Limited partnership": 
+                    return OrganizationType.LimitedPartnership;
+                case "Limited Liability Company (Co. Ltd.)":
+                    return OrganizationType.LimitedLiabilityCompany;
+                case "Incorporated company":
+                    return OrganizationType.IncorporatedCompany;
+                case "Social enterprise":
+                    return OrganizationType.SocialEnterprise;
+                default:
+                    return OrganizationType.Other;
+            }
+        }
     }
 }
