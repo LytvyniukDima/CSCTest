@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CSCTest.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/organizations/{organizationCode}/countries")]
     public class CountriesController : Controller
     {
         // GET api/values

@@ -1,4 +1,4 @@
-using CSCTest.Service.DTO;
+using CSCTest.Service.DTOs;
 
 namespace CSCTest.Service.Abstract
 {

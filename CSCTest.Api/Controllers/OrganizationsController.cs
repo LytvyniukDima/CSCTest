@@ -1,16 +1,16 @@
 using System.Collections.Generic;
 using CSCTest.Service.Abstract;
-using CSCTest.Service.DTO;
+using CSCTest.Service.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSCTest.Api.Controllers
 {
-    [Route("api/[controller]")]
-    public class OrganizationController : Controller
+    [Route("api/organizations")]
+    public class OrganizationsController : Controller
     {
         private readonly IOrganizationService organizationService;
 
-        public OrganizationController(IOrganizationService organizationService)
+        public OrganizationsController(IOrganizationService organizationService)
         {
             this.organizationService = organizationService;
         }

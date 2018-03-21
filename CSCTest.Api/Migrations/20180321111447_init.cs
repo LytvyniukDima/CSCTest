@@ -23,20 +23,6 @@ namespace CSCTest.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Countries",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Code = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Countries", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -116,26 +102,20 @@ namespace CSCTest.Api.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "OrganizationCountries",
+                name: "Countries",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    CountryId = table.Column<int>(nullable: false),
+                    Code = table.Column<string>(nullable: true),
+                    Name = table.Column<string>(nullable: true),
                     OrganizationId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrganizationCountries", x => x.Id);
-                    table.UniqueConstraint("AK_OrganizationCountries_OrganizationId_CountryId", x => new { x.OrganizationId, x.CountryId });
+                    table.PrimaryKey("PK_Countries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_OrganizationCountries_Countries_CountryId",
-                        column: x => x.CountryId,
-                        principalTable: "Countries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_OrganizationCountries_Organizations_OrganizationId",
+                        name: "FK_Countries_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
                         principalColumn: "Id",
@@ -149,12 +129,12 @@ namespace CSCTest.Api.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     BusinessId = table.Column<int>(nullable: false),
-                    OrganizationCountryId = table.Column<int>(nullable: false)
+                    CountryId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CountryBusinesses", x => x.Id);
-                    table.UniqueConstraint("AK_CountryBusinesses_OrganizationCountryId_BusinessId", x => new { x.OrganizationCountryId, x.BusinessId });
+                    table.UniqueConstraint("AK_CountryBusinesses_CountryId_BusinessId", x => new { x.CountryId, x.BusinessId });
                     table.ForeignKey(
                         name: "FK_CountryBusinesses_Businesses_BusinessId",
                         column: x => x.BusinessId,
@@ -162,9 +142,9 @@ namespace CSCTest.Api.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CountryBusinesses_OrganizationCountries_OrganizationCountryId",
-                        column: x => x.OrganizationCountryId,
-                        principalTable: "OrganizationCountries",
+                        name: "FK_CountryBusinesses_Countries_CountryId",
+                        column: x => x.CountryId,
+                        principalTable: "Countries",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -250,6 +230,11 @@ namespace CSCTest.Api.Migrations
                 column: "FamilyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Countries_OrganizationId",
+                table: "Countries",
+                column: "OrganizationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CountryBusinesses_BusinessId",
                 table: "CountryBusinesses",
                 column: "BusinessId");
@@ -280,11 +265,6 @@ namespace CSCTest.Api.Migrations
                 column: "FamilyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_OrganizationCountries_CountryId",
-                table: "OrganizationCountries",
-                column: "CountryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Organizations_UserId",
                 table: "Organizations",
                 column: "UserId");
@@ -311,13 +291,10 @@ namespace CSCTest.Api.Migrations
                 name: "Families");
 
             migrationBuilder.DropTable(
-                name: "OrganizationCountries");
+                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "Businesses");
-
-            migrationBuilder.DropTable(
-                name: "Countries");
 
             migrationBuilder.DropTable(
                 name: "Organizations");

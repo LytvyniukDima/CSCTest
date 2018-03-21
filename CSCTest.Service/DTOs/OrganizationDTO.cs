@@ -1,4 +1,4 @@
-namespace CSCTest.Service.DTO
+namespace CSCTest.Service.DTOs
 {
     public class OrganizationDTO
     {

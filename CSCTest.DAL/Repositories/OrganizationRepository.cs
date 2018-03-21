@@ -45,7 +45,7 @@ namespace CSCTest.DAL.Repositories
         {
             return dbSet
                 .Include(o => o.User)
-                .Include(o => o.OrganizationCountries)
+                .Include(o => o.Countries)
                 .FirstOrDefault(predicate);
         }
 
@@ -53,7 +53,7 @@ namespace CSCTest.DAL.Repositories
         {
             return dbSet
                 .Include(o => o.User)
-                .Include(o => o.OrganizationCountries)
+                .Include(o => o.Countries)
                 .Where(predicate)
                 .ToList();
         }
@@ -62,7 +62,7 @@ namespace CSCTest.DAL.Repositories
         {
             return await dbSet
                 .Include(o => o.User)
-                .Include(o => o.OrganizationCountries)
+                .Include(o => o.Countries)
                 .FirstOrDefaultAsync(predicate);
         }
 
@@ -70,7 +70,7 @@ namespace CSCTest.DAL.Repositories
         {
             return dbSet
                 .Include(o => o.User)
-                .Include(o => o.OrganizationCountries)
+                .Include(o => o.Countries)
                 .ToList();
         }
         
@@ -78,7 +78,7 @@ namespace CSCTest.DAL.Repositories
         {
             return await dbSet
                 .Include(o => o.User)
-                .Include(o => o.OrganizationCountries)
+                .Include(o => o.Countries)
                 .ToListAsync();
         }
 

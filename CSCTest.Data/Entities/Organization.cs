@@ -12,6 +12,6 @@ namespace CSCTest.Data.Entities
         public int UserId { get; set; }
         public User User { get; set; }
 
-        public ICollection<OrganizationCountry> OrganizationCountries { get; set; }
+        public ICollection<Country> Countries { get; set; }
     }
 }

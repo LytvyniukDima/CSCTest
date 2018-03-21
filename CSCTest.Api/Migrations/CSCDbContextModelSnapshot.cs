@@ -60,7 +60,11 @@ namespace CSCTest.Api.Migrations
 
                     b.Property<string>("Name");
 
+                    b.Property<int>("OrganizationId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Countries");
                 });
@@ -72,11 +76,11 @@ namespace CSCTest.Api.Migrations
 
                     b.Property<int>("BusinessId");
 
-                    b.Property<int>("OrganizationCountryId");
+                    b.Property<int>("CountryId");
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("OrganizationCountryId", "BusinessId");
+                    b.HasAlternateKey("CountryId", "BusinessId");
 
                     b.HasIndex("BusinessId");
 
@@ -173,24 +177,6 @@ namespace CSCTest.Api.Migrations
                     b.ToTable("Organizations");
                 });
 
-            modelBuilder.Entity("CSCTest.Data.Entities.OrganizationCountry", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("CountryId");
-
-                    b.Property<int>("OrganizationId");
-
-                    b.HasKey("Id");
-
-                    b.HasAlternateKey("OrganizationId", "CountryId");
-
-                    b.HasIndex("CountryId");
-
-                    b.ToTable("OrganizationCountries");
-                });
-
             modelBuilder.Entity("CSCTest.Data.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -224,6 +210,14 @@ namespace CSCTest.Api.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
+            modelBuilder.Entity("CSCTest.Data.Entities.Country", b =>
+                {
+                    b.HasOne("CSCTest.Data.Entities.Organization", "Organization")
+                        .WithMany("Countries")
+                        .HasForeignKey("OrganizationId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("CSCTest.Data.Entities.CountryBusiness", b =>
                 {
                     b.HasOne("CSCTest.Data.Entities.Business", "Business")
@@ -231,9 +225,9 @@ namespace CSCTest.Api.Migrations
                         .HasForeignKey("BusinessId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("CSCTest.Data.Entities.OrganizationCountry", "OrganizationCountry")
+                    b.HasOne("CSCTest.Data.Entities.Country", "Country")
                         .WithMany("CountryBusinesses")
-                        .HasForeignKey("OrganizationCountryId")
+                        .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -278,19 +272,6 @@ namespace CSCTest.Api.Migrations
                     b.HasOne("CSCTest.Data.Entities.User", "User")
                         .WithMany("Organizations")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("CSCTest.Data.Entities.OrganizationCountry", b =>
-                {
-                    b.HasOne("CSCTest.Data.Entities.Country", "Country")
-                        .WithMany("OrganizationCountries")
-                        .HasForeignKey("CountryId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("CSCTest.Data.Entities.Organization", "Organization")
-                        .WithMany("OrganizationCountries")
-                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

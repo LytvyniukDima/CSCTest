@@ -19,7 +19,6 @@ namespace CSCTest.DAL.EF
         private OfferingRepository offeringRepository;
         private DepartmentRepository departmentRepository;
 
-        private OrganizationCountryRepository organizationCountryRepository;
         private CountryBusinessRepository countryBusinessRepository;
         private BusinessFamilyRepository businessFamilyRepository;
         private FamilyOfferingRepository familyOfferingRepository;
@@ -110,18 +109,6 @@ namespace CSCTest.DAL.EF
                     departmentRepository = new DepartmentRepository(dbContext);
                 }
                 return departmentRepository;
-            }
-        }
-
-        public IRepository<OrganizationCountry> OrganizationCountryRepository
-        {
-            get
-            {
-                if (organizationCountryRepository == null)
-                {
-                    organizationCountryRepository = new OrganizationCountryRepository(dbContext);
-                }
-                return organizationCountryRepository;
             }
         }
 

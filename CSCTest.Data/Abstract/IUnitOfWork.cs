@@ -14,7 +14,6 @@ namespace CSCTest.Data.Abstract
         IRepository<Offering> OfferingRepository { get; }
         IRepository<Department> DepartmentRepository { get; }
 
-        IRepository<OrganizationCountry> OrganizationCountryRepository { get; }
         IRepository<CountryBusiness> CountryBusinessRepository { get; }
         IRepository<BusinessFamily> BusinessFamilyRepository { get; }
         IRepository<FamilyOffering> FamilyOfferingRepository { get; }

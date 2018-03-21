@@ -44,7 +44,7 @@ namespace CSCTest.DAL.Repositories
         public CountryBusiness Find(Func<CountryBusiness, bool> predicate)
         {
             return dbSet
-                .Include(c => c.OrganizationCountry)
+                .Include(c => c.Country)
                 .Include(c => c.Business)
                 .Include(c => c.BusinessFamilies)
                 .FirstOrDefault(predicate);
@@ -53,7 +53,7 @@ namespace CSCTest.DAL.Repositories
         public IEnumerable<CountryBusiness> FindAll(Func<CountryBusiness, bool> predicate)
         {
             return dbSet
-                .Include(c => c.OrganizationCountry)
+                .Include(c => c.Country)
                 .Include(c => c.Business)
                 .Include(c => c.BusinessFamilies)
                 .Where(predicate)
@@ -63,7 +63,7 @@ namespace CSCTest.DAL.Repositories
         public async Task<CountryBusiness> FindAsync(Expression<Func<CountryBusiness, bool>> predicate)
         {
             return await dbSet
-                .Include(c => c.OrganizationCountry)
+                .Include(c => c.Country)
                 .Include(c => c.Business)
                 .Include(c => c.BusinessFamilies)
                 .FirstOrDefaultAsync(predicate);
@@ -72,7 +72,7 @@ namespace CSCTest.DAL.Repositories
         public IEnumerable<CountryBusiness> GetAll()
         {
             return dbSet
-                .Include(c => c.OrganizationCountry)
+                .Include(c => c.Country)
                 .Include(c => c.Business)
                 .Include(c => c.BusinessFamilies)
                 .ToList();
@@ -81,7 +81,7 @@ namespace CSCTest.DAL.Repositories
         public async Task<IEnumerable<CountryBusiness>> GetAllAsync()
         {
             return await dbSet
-                .Include(c => c.OrganizationCountry)
+                .Include(c => c.Country)
                 .Include(c => c.Business)
                 .Include(c => c.BusinessFamilies)
                 .ToListAsync();

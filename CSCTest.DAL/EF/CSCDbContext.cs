@@ -13,7 +13,6 @@ namespace CSCTest.DAL.EF
         public DbSet<Offering> Offerings { get; set; }
         public DbSet<Department> Departments { get; set; }
 
-        public DbSet<OrganizationCountry> OrganizationCountries { get; set; }
         public DbSet<CountryBusiness> CountryBusinesses { get; set; }
         public DbSet<BusinessFamily> BusinessFamilies { get; set; }
         public DbSet<FamilyOffering> FamilyOfferings { get; set; }
@@ -27,13 +26,9 @@ namespace CSCTest.DAL.EF
         {
             base.OnModelCreating(modelBuilder);
 
-            // ManyToMany(Organization, Country)
-            modelBuilder.Entity<OrganizationCountry>()
-                .HasAlternateKey(oc => new { oc.OrganizationId, oc.CountryId });
-
-            // ManyToMany(OrganizationCountry, Business)
+            // ManyToMany(Country, Business)
             modelBuilder.Entity<CountryBusiness>()
-                .HasAlternateKey(cb => new { cb.OrganizationCountryId, cb.BusinessId });
+                .HasAlternateKey(cb => new { cb.CountryId, cb.BusinessId });
 
             // ManyToMany(CountryBusiness, Family)
             modelBuilder.Entity<BusinessFamily>()

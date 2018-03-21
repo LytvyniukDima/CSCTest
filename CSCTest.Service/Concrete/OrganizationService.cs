@@ -1,8 +1,9 @@
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using CSCTest.Service.Abstract;
-using CSCTest.Service.DTO;
+using CSCTest.Service.DTOs;
 using CSCTest.Tools.Extensions;
+using AutoMapper;
 
 namespace CSCTest.Service.Concrete
 {
@@ -13,6 +14,8 @@ namespace CSCTest.Service.Concrete
         public OrganizationService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+            Mapper.Initialize(cfg => cfg.CreateMap<OrganizationDTO, Organization>()
+                .ForMember("Type", opt => opt.MapFrom(od => od.Type.GetOrganizationType())));
         }
 
         public void AddOrganization(OrganizationDTO organizationDTO)
@@ -22,21 +25,19 @@ namespace CSCTest.Service.Concrete
                 var organizationRepository = unitOfWork.OrganizationRepository;
                 var userRepository = unitOfWork.UserRepository;
 
-                userRepository.Add(new User { Name = "One" });
-                unitOfWork.Save();
-
                 var user = userRepository.Find(x => x.Name == "One");
 
-                organizationRepository.Add(new Organization
-                {
-                    Name = organizationDTO.Name,
-                    Code = organizationDTO.Code,
-                    Type = organizationDTO.Type.GetOrganizationType(),
-                    User = user
-                });
+                var organization = Mapper.Map<OrganizationDTO, Organization>(organizationDTO);
+                organization.User = user;
+                organizationRepository.Add(organization);
 
                 unitOfWork.Save();
             }
+        }
+
+        public void DeleteOrganization(string organizationCode)
+        {
+
         }
     }
 }
