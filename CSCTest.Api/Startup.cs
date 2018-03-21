@@ -7,6 +7,7 @@ using CSCTest.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.Concrete;
+using AutoMapper;
 
 namespace CSCTest.Api
 {
@@ -22,12 +23,15 @@ namespace CSCTest.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
+
+            services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
 
             services.AddMvc();
             services.AddSwaggerDocumentation();
             services.AddEFUnitOfWork(Configuration.GetConnectionString("DefaultConnection"));
-        
+
             services.AddDbContext<CSCDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("CSCTest.Api")));
         }

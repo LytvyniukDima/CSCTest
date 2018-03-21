@@ -4,6 +4,7 @@ namespace CSCTest.Service.Abstract
 {
     public interface IOrganizationService
     {
-        void AddOrganization(OrganizationDTO organizationDTO);
+        void AddOrganization(OrganizationDto organizationDTO);
+        void DeleteOrganization(string code);
     }
 }

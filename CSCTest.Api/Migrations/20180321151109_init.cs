@@ -235,6 +235,13 @@ namespace CSCTest.Api.Migrations
                 column: "OrganizationId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Countries_Code_OrganizationId",
+                table: "Countries",
+                columns: new[] { "Code", "OrganizationId" },
+                unique: true,
+                filter: "[Code] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CountryBusinesses_BusinessId",
                 table: "CountryBusinesses",
                 column: "BusinessId");
@@ -265,9 +272,23 @@ namespace CSCTest.Api.Migrations
                 column: "FamilyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Organizations_Code",
+                table: "Organizations",
+                column: "Code",
+                unique: true,
+                filter: "[Code] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Organizations_UserId",
                 table: "Organizations",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true,
+                filter: "[Email] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

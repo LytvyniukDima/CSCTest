@@ -1,21 +1,24 @@
 using System.Collections.Generic;
+using AutoMapper;
+using CSCTest.Api.Models;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSCTest.Api.Controllers
 {
-    [Route("api/organizations")]
-    public class OrganizationsController : Controller
+    [Route("api/users")]
+    public class UsersController : Controller
     {
-        private readonly IOrganizationService organizationService;
-
-        public OrganizationsController(IOrganizationService organizationService)
-        {
-            this.organizationService = organizationService;
-        }
+        private readonly IMapper mapper;
+        private readonly IUserService userService;
         
-        // GET api/values
+        public UsersController(IMapper mapper, IUserService userService)
+        {
+            this.mapper = mapper;
+            this.userService = userService;
+        }
+
         [HttpGet]
         public IEnumerable<string> Get()
         {
@@ -31,14 +34,9 @@ namespace CSCTest.Api.Controllers
 
         // POST api/values
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody] RegistrationUserCredentials registrationUserCredentials)
         {
-            organizationService.AddOrganization(new OrganizationDto
-            {
-                Name = "Bla",
-                Code = "US",
-                Type = "Incorporated company"
-            });
+            userService.AddUser(mapper.Map<RegistrationUserCredentials, UserRegistrationDto>(registrationUserCredentials));
         }
 
         // PUT api/values/5
@@ -55,7 +53,7 @@ namespace CSCTest.Api.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            organizationService.DeleteOrganization("bal");
+            
         }
     }
 }

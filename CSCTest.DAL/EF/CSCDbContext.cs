@@ -45,12 +45,17 @@ namespace CSCTest.DAL.EF
 
             // Country must be unique inside an organization
             modelBuilder.Entity<Country>()
-                .HasIndex(c => new { c.Code, c.Organization})
+                .HasIndex(c => new { c.Code, c.OrganizationId})
                 .IsUnique();
 
             // Organization code is unique for an organization
             modelBuilder.Entity<Organization>()
                 .HasIndex(o => o.Code)
+                .IsUnique();
+
+            // Unique email
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Email)
                 .IsUnique();
         }
     }

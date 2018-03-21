@@ -10,24 +10,27 @@ namespace CSCTest.Service.Concrete
     public class OrganizationService : IOrganizationService
     {
         private readonly IUnitOfWork unitOfWork;
-
-        public OrganizationService(IUnitOfWork unitOfWork)
+        private readonly IMapper mapper;
+        
+        public OrganizationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
-            Mapper.Initialize(cfg => cfg.CreateMap<OrganizationDTO, Organization>()
-                .ForMember("Type", opt => opt.MapFrom(od => od.Type.GetOrganizationType())));
+            this.mapper = mapper;
         }
 
-        public void AddOrganization(OrganizationDTO organizationDTO)
-        {
+        public void AddOrganization(OrganizationDto organizationDTO)
+        {       
             using (unitOfWork)
             {
                 var organizationRepository = unitOfWork.OrganizationRepository;
                 var userRepository = unitOfWork.UserRepository;
 
+                userRepository.Add(new User { Name = "One" });
+                unitOfWork.Save();
+
                 var user = userRepository.Find(x => x.Name == "One");
 
-                var organization = Mapper.Map<OrganizationDTO, Organization>(organizationDTO);
+                var organization = mapper.Map<OrganizationDto, Organization>(organizationDTO);
                 organization.User = user;
                 organizationRepository.Add(organization);
 
@@ -35,9 +38,19 @@ namespace CSCTest.Service.Concrete
             }
         }
 
-        public void DeleteOrganization(string organizationCode)
+        public void DeleteOrganization(string code)
         {
+            using (unitOfWork)
+            {
+                var organizationRepository = unitOfWork.OfferingRepository;
+                var userRepository = unitOfWork.UserRepository;
 
+                var user = userRepository.Find(x => x.Name == "One");
+
+                userRepository.Delete(user);
+
+                unitOfWork.Save();
+            }
         }
     }
 }
