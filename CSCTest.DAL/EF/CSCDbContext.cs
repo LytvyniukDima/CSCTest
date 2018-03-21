@@ -34,7 +34,7 @@ namespace CSCTest.DAL.EF
             modelBuilder.Entity<BusinessFamily>()
                 .HasAlternateKey(cf => new { cf.CountryBusinessId, cf.FamilyId });
 
-            //ManyToMany(BusinessFamily, Offering)
+            // ManyToMany(BusinessFamily, Offering)
             modelBuilder.Entity<FamilyOffering>()
                 .HasAlternateKey(fo => new { fo.BussinessFamilyId, fo.OfferingId });
 
@@ -42,6 +42,16 @@ namespace CSCTest.DAL.EF
                 .HasOne(bf => bf.Family)
                 .WithMany(f => f.BusinessFamilies)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            // Country must be unique inside an organization
+            modelBuilder.Entity<Country>()
+                .HasIndex(c => new { c.Code, c.Organization})
+                .IsUnique();
+
+            // Organization code is unique for an organization
+            modelBuilder.Entity<Organization>()
+                .HasIndex(o => o.Code)
+                .IsUnique();
         }
     }
 }
