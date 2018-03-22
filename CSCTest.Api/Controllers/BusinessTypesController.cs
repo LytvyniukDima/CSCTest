@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CSCTest.Api.Controllers
 {
     [Authorize]
-    [Route("/api/business-types")]
+    [Route("/api/business_types")]
     public class BusinessTypesController : Controller
     {
         private readonly IBusinessService businessService;

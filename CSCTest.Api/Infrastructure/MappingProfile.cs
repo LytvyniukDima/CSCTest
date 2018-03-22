@@ -9,6 +9,8 @@ using CSCTest.Service.DTOs.Organizations;
 using CSCTest.Service.DTOs.Countries;
 using CSCTest.Service.DTOs.Businesses;
 using CSCTest.Api.Models.Businesses;
+using CSCTest.Service.DTOs.Families;
+using CSCTest.Api.Models.Families;
 
 namespace CSCTest.Api.Infrastructure
 {
@@ -42,6 +44,11 @@ namespace CSCTest.Api.Infrastructure
                 .ForMember("Name", opt => opt.MapFrom(cb => cb.Business.Name))
                 .ForMember("HasChildren", opt => opt.MapFrom(cb => cb.BusinessFamilies.Count > 0 ? true : false));
             CreateMap<BusinessDto, BusinessViewModel>();
+
+            CreateMap<FamilyTypeCreateDto, Family>();
+            CreateMap<Family, FamilyTypeDto>()
+                .ForMember("BusinessName", opt => opt.MapFrom(f => f.Business.Name));
+            CreateMap<FamilyTypeDto, FamilyTypeViewModel>();
         }
     }
 }
