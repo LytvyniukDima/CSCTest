@@ -1,4 +1,7 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using CSCTest.Api.Models.Organizations;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -11,38 +14,46 @@ namespace CSCTest.Api.Controllers
     public class OrganizationsController : Controller
     {
         private readonly IOrganizationService organizationService;
-
-        public OrganizationsController(IOrganizationService organizationService)
+        private readonly IMapper mapper;
+        
+        public OrganizationsController(IOrganizationService organizationService, IMapper mapper)
         {
             this.organizationService = organizationService;
+            this.mapper = mapper;
         }
 
-        // GET api/values
+        [AllowAnonymous]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var organizations = await organizationService.GetOrganizationsAsync();
+
+            var organizationViewModels = mapper.Map<IEnumerable<OrganizationDto>, IEnumerable<OrganizationViewModel>>(organizations);
+
+            return Ok(organizationViewModels);
         }
 
-        // GET api/values/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public IActionResult Get(int id)
         {
-            return "value";
+            var organization = organizationService.GetOrganization(id);
+            if (organization == null)
+                return NotFound();
+
+            var organizationViewModel = mapper.Map<OrganizationDto, OrganizationViewModel>(organization);
+
+            return Ok(organizationViewModel);
         }
 
         [HttpPost]
-        public void Post([FromBody]string value)
+        public void Post([FromBody]CreateOrganizationModel createOrganizationModel)
         {
             string email = User.Identity.Name;
 
-            organizationService.AddOrganization(new OrganizationDto
-            {
-                Name = "Bla",
-                Code = "US",
-                Type = "Incorporated company"
-            },
-            email);
+            organizationService.AddOrganization(
+                mapper.Map<CreateOrganizationModel, OrganizationDto>(createOrganizationModel),
+                email);
         }
 
         // PUT api/values/5
@@ -59,7 +70,8 @@ namespace CSCTest.Api.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            organizationService.DeleteOrganization("bal");
+            string email = User.Identity.Name;
+            organizationService.DeleteOrganization(id, email);
         }
     }
 }

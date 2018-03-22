@@ -1,5 +1,5 @@
 using AutoMapper;
-using CSCTest.Api.Models;
+using CSCTest.Api.Models.Users;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs;
 using Microsoft.AspNetCore.Mvc;

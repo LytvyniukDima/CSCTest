@@ -1,6 +1,6 @@
-namespace CSCTest.Service.DTOs
+namespace CSCTest.Api.Models.Organizations
 {
-    public class OrganizationDto
+    public class OrganizationViewModel
     {
         public int Id { get; set; }
         public string Name { get; set; }

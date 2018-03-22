@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using CSCTest.Service.DTOs;
 
 namespace CSCTest.Service.Abstract
@@ -5,6 +7,8 @@ namespace CSCTest.Service.Abstract
     public interface IOrganizationService
     {
         void AddOrganization(OrganizationDto organizationDto, string email);
-        void DeleteOrganization(string code);
+        void DeleteOrganization(int id, string email);
+        OrganizationDto GetOrganization(int id);
+        Task<IEnumerable<OrganizationDto>> GetOrganizationsAsync();
     }
 }

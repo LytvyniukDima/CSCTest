@@ -1,4 +1,4 @@
-namespace CSCTest.Api.Models
+namespace CSCTest.Api.Models.Users
 {
     public class RegistrationUserCredentials
     {

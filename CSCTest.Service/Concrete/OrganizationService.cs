@@ -4,6 +4,8 @@ using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs;
 using CSCTest.Tools.Extensions;
 using AutoMapper;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CSCTest.Service.Concrete
 {
@@ -11,7 +13,7 @@ namespace CSCTest.Service.Concrete
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
-        
+
         public OrganizationService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             this.unitOfWork = unitOfWork;
@@ -19,7 +21,7 @@ namespace CSCTest.Service.Concrete
         }
 
         public void AddOrganization(OrganizationDto organizationDTO, string email)
-        {       
+        {
             using (unitOfWork)
             {
                 var organizationRepository = unitOfWork.OrganizationRepository;
@@ -35,18 +37,50 @@ namespace CSCTest.Service.Concrete
             }
         }
 
-        public void DeleteOrganization(string code)
+        public void DeleteOrganization(int id, string email)
         {
             using (unitOfWork)
             {
-                var organizationRepository = unitOfWork.OfferingRepository;
+                var organizationRepository = unitOfWork.OrganizationRepository;
                 var userRepository = unitOfWork.UserRepository;
 
-                var user = userRepository.Find(x => x.Name == "One");
+                var user = userRepository.Find(x => x.Email == email);
+                var organization = organizationRepository.Find(x => x.Id == id && x.UserId == user.Id);
 
-                userRepository.Delete(user);
+                if (organization != null)
+                {
+                    organizationRepository.Delete(organization);
+                    unitOfWork.Save();
+                }
+            }
+        }
 
-                unitOfWork.Save();
+        public OrganizationDto GetOrganization(int id)
+        {
+            using (unitOfWork)
+            {
+                var organizationRepository = unitOfWork.OrganizationRepository;
+
+                var organization = organizationRepository.Find(x => x.Id == id);
+                if (organization == null)
+                    return null;
+
+                var organizationDto = mapper.Map<Organization, OrganizationDto>(organization);
+
+                return organizationDto;
+            }
+        }
+
+        public async Task<IEnumerable<OrganizationDto>> GetOrganizationsAsync()
+        {
+            using (unitOfWork)
+            {
+                var organizationRepository = unitOfWork.OrganizationRepository;
+
+                var organizations = await organizationRepository.GetAllAsync();
+                var organizationDtos = mapper.Map<IEnumerable<Organization>, IEnumerable<OrganizationDto>>(organizations);
+                
+                return organizationDtos;
             }
         }
     }
