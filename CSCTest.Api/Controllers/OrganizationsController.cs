@@ -9,13 +9,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CSCTest.Api.Controllers
 {
-    [Route("api/organizations")]
     [Authorize]
+    [Route("api/organizations")]
     public class OrganizationsController : Controller
     {
         private readonly IOrganizationService organizationService;
         private readonly IMapper mapper;
-        
+
         public OrganizationsController(IOrganizationService organizationService, IMapper mapper)
         {
             this.organizationService = organizationService;
@@ -35,9 +35,9 @@ namespace CSCTest.Api.Controllers
 
         [AllowAnonymous]
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var organization = organizationService.GetOrganization(id);
+            var organization = await organizationService.GetOrganizationAsync(id);
             if (organization == null)
                 return NotFound();
 
@@ -47,25 +47,31 @@ namespace CSCTest.Api.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody]CreateOrganizationModel createOrganizationModel)
+        public async Task <IActionResult> Post([FromBody]CreateOrganizationModel createOrganizationModel)
         {
             string email = User.Identity.Name;
 
-            organizationService.AddOrganization(
+            await organizationService.AddOrganizationAsync(
                 mapper.Map<CreateOrganizationModel, OrganizationDto>(createOrganizationModel),
-                email);
+                email
+            );
+
+            return Ok();
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]CreateOrganizationModel createOrganizationModel)
+        public async Task<IActionResult> Put(int id, [FromBody]CreateOrganizationModel createOrganizationModel)
         {
             string email = User.Identity.Name;
 
-            organizationService.Update(
+            await organizationService.UpdateAsync(
                 id,
                 mapper.Map<CreateOrganizationModel, OrganizationDto>(createOrganizationModel),
-                email);
+                email
+            );
+            
+            return Ok();
         }
 
         /// <summary>
@@ -74,10 +80,12 @@ namespace CSCTest.Api.Controllers
         /// <remarks>Delete country by id.</remarks>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             string email = User.Identity.Name;
-            organizationService.DeleteOrganization(id, email);
+            await organizationService.DeleteOrganizationAsync(id, email);
+
+            return Ok();
         }
     }
 }

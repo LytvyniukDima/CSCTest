@@ -6,10 +6,10 @@ namespace CSCTest.Service.Abstract
 {
     public interface IOrganizationService
     {
-        void AddOrganization(OrganizationDto organizationDto, string email);
-        void DeleteOrganization(int id, string email);
-        OrganizationDto GetOrganization(int id);
+        Task AddOrganizationAsync(OrganizationDto organizationDto, string email);
+        Task DeleteOrganizationAsync(int id, string email);
+        Task<OrganizationDto> GetOrganizationAsync(int id);
         Task<IEnumerable<OrganizationDto>> GetOrganizationsAsync();
-        void Update(int id, OrganizationDto organizationDto, string email);
+        Task UpdateAsync(int id, OrganizationDto organizationDto, string email);
     }
 }

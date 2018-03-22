@@ -4,6 +4,7 @@ using CSCTest.Api.Models.Organizations;
 using CSCTest.Data.Entities;
 using CSCTest.Service.DTOs;
 using CSCTest.Tools.Extensions;
+using CSCTest.Api.Models.Countries;
 
 namespace CSCTest.Api.Infrastructure
 {
@@ -11,6 +12,9 @@ namespace CSCTest.Api.Infrastructure
     {
         public MappingProfile()
         {
+            CreateMap<RegistrationUserCredentials, UserRegistrationDto>();
+            CreateMap<UserRegistrationDto, User>();
+
             CreateMap<OrganizationDto, Organization>()
                 .ForMember("Type", opt => opt.MapFrom(od => od.Type.GetOrganizationType()))
                 .ForMember("Id", opt => opt.Ignore());
@@ -21,9 +25,11 @@ namespace CSCTest.Api.Infrastructure
             CreateMap<CreateOrganizationModel, OrganizationDto>();
             CreateMap<OrganizationDto, OrganizationViewModel>();
 
-            CreateMap<RegistrationUserCredentials, UserRegistrationDto>();
-            CreateMap<UserRegistrationDto, User>();
-            
+            CreateMap<CreateCountryModel, CreateCountryDto>();
+            CreateMap<CreateCountryDto, Country>();
+            CreateMap<Country, CountryDto>()
+                .ForMember("HasChildren", opt => opt.MapFrom(c => c.CountryBusinesses.Count > 0 ? true : false));
+            CreateMap<CountryDto, CountryViewModel>();
         }
     }
 }

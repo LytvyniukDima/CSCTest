@@ -20,48 +20,48 @@ namespace CSCTest.Service.Concrete
             this.mapper = mapper;
         }
 
-        public void AddOrganization(OrganizationDto organizationDTO, string email)
+        public async Task AddOrganizationAsync(OrganizationDto organizationDTO, string email)
         {
             using (unitOfWork)
             {
                 var organizationRepository = unitOfWork.OrganizationRepository;
                 var userRepository = unitOfWork.UserRepository;
 
-                var user = userRepository.Find(x => x.Email == email);
+                var user = await userRepository.FindAsync(x => x.Email == email);
 
                 var organization = mapper.Map<OrganizationDto, Organization>(organizationDTO);
                 organization.User = user;
                 organizationRepository.Add(organization);
 
-                unitOfWork.Save();
+                await unitOfWork.SaveAsync();
             }
         }
 
-        public void DeleteOrganization(int id, string email)
+        public async Task DeleteOrganizationAsync(int id, string email)
         {
             using (unitOfWork)
             {
                 var organizationRepository = unitOfWork.OrganizationRepository;
                 var userRepository = unitOfWork.UserRepository;
 
-                var user = userRepository.Find(x => x.Email == email);
-                var organization = organizationRepository.Find(x => x.Id == id && x.UserId == user.Id);
+                var user = await userRepository.FindAsync(x => x.Email == email);
+                var organization = await organizationRepository.FindAsync(x => x.Id == id && x.UserId == user.Id);
 
                 if (organization != null)
                 {
                     organizationRepository.Delete(organization);
-                    unitOfWork.Save();
+                    await unitOfWork.SaveAsync();
                 }
             }
         }
 
-        public OrganizationDto GetOrganization(int id)
+        public async Task<OrganizationDto> GetOrganizationAsync(int id)
         {
             using (unitOfWork)
             {
                 var organizationRepository = unitOfWork.OrganizationRepository;
 
-                var organization = organizationRepository.Find(x => x.Id == id);
+                var organization = await organizationRepository.FindAsync(x => x.Id == id);
                 if (organization == null)
                     return null;
 
@@ -83,19 +83,19 @@ namespace CSCTest.Service.Concrete
                 return organizationDtos;
             }
         }
-        public void Update(int id, OrganizationDto organizationDto, string email)
+        public async Task UpdateAsync(int id, OrganizationDto organizationDto, string email)
         {
             using (unitOfWork)
             {
                 var organizationRepository = unitOfWork.OrganizationRepository;
 
-                var organization = organizationRepository.Find(x => x.Id == id && x.User.Email == email);
+                var organization = await organizationRepository.FindAsync(x => x.Id == id && x.User.Email == email);
                 if (organization == null)
                     return;
 
                 mapper.Map<OrganizationDto, Organization>(organizationDto, organization);
                 organizationRepository.Update(organization);
-                unitOfWork.Save();
+                await unitOfWork.SaveAsync();
             }
         }
     }

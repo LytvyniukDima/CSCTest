@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading.Tasks;
 using AutoMapper;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
@@ -29,9 +30,9 @@ namespace CSCTest.Service.Concrete
             this.mapper = mapper;
         }
 
-        public string CreateJwtToken(string email, string password)
+        public async Task<string> CreateJwtTokenAsync(string email, string password)
         {
-            var claimsIdentity = GetIdentity(email, password);
+            var claimsIdentity = await GetIdentity(email, password);
             if (claimsIdentity == null)
                 return null;
 
@@ -49,36 +50,42 @@ namespace CSCTest.Service.Concrete
             return encodedJwt;
         }
 
-        public void RegisterUser(UserRegistrationDto userRegistrationDto)
+        public async Task RegisterUserAsync(UserRegistrationDto userRegistrationDto)
         {
-            var userRepository = unitOfWork.UserRepository;
-            var user = mapper.Map<UserRegistrationDto, User>(userRegistrationDto);
-            userRepository.Add(user);
-            unitOfWork.Save();
+            using (unitOfWork)
+            {
+                var userRepository = unitOfWork.UserRepository;
+                var user = mapper.Map<UserRegistrationDto, User>(userRegistrationDto);
+                userRepository.Add(user);
+                await unitOfWork.SaveAsync();
+            }
         }
 
-        private ClaimsIdentity GetIdentity(string email, string password)
+        private async Task<ClaimsIdentity> GetIdentity(string email, string password)
         {
-            var userRepository = unitOfWork.UserRepository;
+            using (unitOfWork)
+            {
+                var userRepository = unitOfWork.UserRepository;
 
-            var user = userRepository.Find(x => x.Email == email && x.Password == password);
-            if (user == null)
-                return null;
+                var user = await userRepository.FindAsync(x => x.Email == email && x.Password == password);
+                if (user == null)
+                    return null;
 
-            var claims = new List<Claim>
+                var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, email),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, "customer")
                 };
 
-            var claimsIdentity = new ClaimsIdentity(
-                claims,
-                "Token",
-                ClaimsIdentity.DefaultNameClaimType,
-                ClaimsIdentity.DefaultRoleClaimType
-            );
+                var claimsIdentity = new ClaimsIdentity(
+                    claims,
+                    "Token",
+                    ClaimsIdentity.DefaultNameClaimType,
+                    ClaimsIdentity.DefaultRoleClaimType
+                );
 
-            return claimsIdentity;
+                return claimsIdentity;
+            }
         }
     }
 }

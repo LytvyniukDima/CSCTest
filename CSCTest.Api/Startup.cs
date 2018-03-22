@@ -28,7 +28,8 @@ namespace CSCTest.Api
             
             services.AddScoped<IAccountService, AccountService>();
             services.AddScoped<IOrganizationService, OrganizationService>();
-
+            services.AddScoped<ICountryService, CountryService>();
+            
             services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
 
             services.AddJwtAthorization(Configuration.GetSection("AuthOptions"));

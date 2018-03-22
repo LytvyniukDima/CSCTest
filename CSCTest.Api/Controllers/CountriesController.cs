@@ -1,35 +1,74 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using AutoMapper;
+using CSCTest.Api.Models.Countries;
+using CSCTest.Service.Abstract;
+using CSCTest.Service.DTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSCTest.Api.Controllers
 {
-    [Route("api/organizations/{organizationCode}/countries")]
+    [Authorize]
+    [Route("api/countries")]
     public class CountriesController : Controller
     {
-        // GET api/values
+        private readonly ICountryService countryService;
+        private readonly IMapper mapper;
+
+        public CountriesController(ICountryService countryService, IMapper mapper)
+        {
+            this.countryService = countryService;
+            this.mapper = mapper;
+        }
+
+        [AllowAnonymous]
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var countries = await countryService.GetCountriesAsync();
+            var countryViewModels = mapper.Map<IEnumerable<CountryDto>, IEnumerable<CountryViewModel>>(countries);
+
+            return Ok(countryViewModels);
         }
 
-        // GET api/values/5
+        [AllowAnonymous]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var country = await countryService.GetCountryAsync(id);
+            if (country == null)
+                return NotFound();
+
+            var countryViewModel = mapper.Map<CountryDto, CountryViewModel>(country);
+            return Ok(countryViewModel);
         }
 
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
+        [HttpPost("~/api/organizations/{organizationId}/countries")]
+        public async Task<IActionResult> Post(int organizationId, [FromBody]CreateCountryModel createCountryModel)
         {
+            string email = User.Identity.Name;
+
+            await countryService.AddCountryAsync(
+                organizationId,
+                mapper.Map<CreateCountryModel, CreateCountryDto>(createCountryModel),
+                email
+            );
+
+            return Ok();
         }
 
-        // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public async Task<IActionResult> Put(int id, [FromBody]CreateCountryModel createCountryModel)
         {
+            string email = User.Identity.Name;
+
+            await countryService.UpdateCountryAsync(
+                id,
+                mapper.Map<CreateCountryModel, CreateCountryDto>(createCountryModel),
+                email);
+
+            return Ok();
         }
 
         /// <summary>
@@ -38,8 +77,12 @@ namespace CSCTest.Api.Controllers
         /// <remarks>Delete country by id.</remarks>
         /// <param name="id"></param>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            string email = User.Identity.Name;
+
+            await countryService.DeleteCountryAsync(id, email);
+            return Ok();
         }
     }
 }

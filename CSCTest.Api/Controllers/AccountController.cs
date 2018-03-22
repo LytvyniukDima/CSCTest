@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using AutoMapper;
 using CSCTest.Api.Models.Users;
 using CSCTest.Service.Abstract;
@@ -19,9 +20,9 @@ namespace CSCTest.Api.Controllers
         }
 
         [HttpPost("token")]
-        public IActionResult GetToken([FromBody] LoginCredentials loginCredentials)
+        public async Task<IActionResult> GetToken([FromBody] LoginCredentials loginCredentials)
         {
-            string token = accountService.CreateJwtToken(loginCredentials.Email, loginCredentials.Password);
+            string token = await accountService.CreateJwtTokenAsync(loginCredentials.Email, loginCredentials.Password);
             if (token == null)
                 return BadRequest("Invalid username or password.");
 
@@ -29,9 +30,9 @@ namespace CSCTest.Api.Controllers
         }
 
         [HttpPost("registration")]
-        public IActionResult RegisterUser([FromBody] RegistrationUserCredentials registrationUserCredentials)
+        public async Task<IActionResult> RegisterUser([FromBody] RegistrationUserCredentials registrationUserCredentials)
         {
-            accountService.RegisterUser(mapper.Map<RegistrationUserCredentials, UserRegistrationDto>(registrationUserCredentials));
+            await accountService.RegisterUserAsync(mapper.Map<RegistrationUserCredentials, UserRegistrationDto>(registrationUserCredentials));
 
             return Ok();
         }
