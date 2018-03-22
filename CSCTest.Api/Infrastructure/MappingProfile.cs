@@ -12,7 +12,8 @@ namespace CSCTest.Api.Infrastructure
         public MappingProfile()
         {
             CreateMap<OrganizationDto, Organization>()
-                .ForMember("Type", opt => opt.MapFrom(od => od.Type.GetOrganizationType()));
+                .ForMember("Type", opt => opt.MapFrom(od => od.Type.GetOrganizationType()))
+                .ForMember("Id", opt => opt.Ignore());
             CreateMap<Organization, OrganizationDto>()
                 .ForMember("Type", opt => opt.MapFrom(o => o.Type.GetStringName()))
                 .ForMember("OwnerId", opt => opt.MapFrom(o => o.UserId))

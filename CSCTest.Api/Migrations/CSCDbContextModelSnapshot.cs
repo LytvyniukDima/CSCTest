@@ -184,7 +184,8 @@ namespace CSCTest.Api.Migrations
 
                     b.Property<string>("Address");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
                     b.Property<string>("Name");
 
@@ -193,6 +194,8 @@ namespace CSCTest.Api.Migrations
                     b.Property<string>("Surname");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Email");
 
                     b.ToTable("Users");
                 });

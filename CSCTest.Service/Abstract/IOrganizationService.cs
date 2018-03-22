@@ -10,5 +10,6 @@ namespace CSCTest.Service.Abstract
         void DeleteOrganization(int id, string email);
         OrganizationDto GetOrganization(int id);
         Task<IEnumerable<OrganizationDto>> GetOrganizationsAsync();
+        void Update(int id, OrganizationDto organizationDto, string email);
     }
 }

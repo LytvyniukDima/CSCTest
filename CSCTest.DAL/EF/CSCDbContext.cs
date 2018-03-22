@@ -42,6 +42,9 @@ namespace CSCTest.DAL.EF
                 .HasOne(bf => bf.Family)
                 .WithMany(f => f.BusinessFamilies)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>()
+                .HasAlternateKey(u => u.Email);
         }
     }
 }

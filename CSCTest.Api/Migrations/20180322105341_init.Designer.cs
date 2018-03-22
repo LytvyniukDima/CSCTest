@@ -12,7 +12,7 @@ using System;
 namespace CSCTest.Api.Migrations
 {
     [DbContext(typeof(CSCDbContext))]
-    [Migration("20180321190144_init")]
+    [Migration("20180322105341_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,7 +185,8 @@ namespace CSCTest.Api.Migrations
 
                     b.Property<string>("Address");
 
-                    b.Property<string>("Email");
+                    b.Property<string>("Email")
+                        .IsRequired();
 
                     b.Property<string>("Name");
 
@@ -194,6 +195,8 @@ namespace CSCTest.Api.Migrations
                     b.Property<string>("Surname");
 
                     b.HasKey("Id");
+
+                    b.HasAlternateKey("Email");
 
                     b.ToTable("Users");
                 });

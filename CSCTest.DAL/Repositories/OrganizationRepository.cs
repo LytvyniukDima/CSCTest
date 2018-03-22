@@ -23,12 +23,17 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Organization entity)
         {
+            var organization = Find(x => x.Id != entity.Id && x.Code == entity.Code);
+            if (organization != null)
+                return;
+                
             dbSet.Add(entity);
         }
 
         public void AddRange(IEnumerable<Organization> entities)
         {
-            dbSet.AddRange(entities);
+            foreach (var entity in entities)
+                Add(entity);
         }
 
         public void Delete(Organization entity)
@@ -84,6 +89,10 @@ namespace CSCTest.DAL.Repositories
 
         public void Update(Organization entity)
         {
+            var organization = Find(x => x.Id != entity.Id && x.Code == entity.Code);
+            if (organization != null)
+                return;
+
             dbContext.Entry(entity).State = EntityState.Modified;
         }
     }

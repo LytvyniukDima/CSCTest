@@ -79,8 +79,23 @@ namespace CSCTest.Service.Concrete
 
                 var organizations = await organizationRepository.GetAllAsync();
                 var organizationDtos = mapper.Map<IEnumerable<Organization>, IEnumerable<OrganizationDto>>(organizations);
-                
+
                 return organizationDtos;
+            }
+        }
+        public void Update(int id, OrganizationDto organizationDto, string email)
+        {
+            using (unitOfWork)
+            {
+                var organizationRepository = unitOfWork.OrganizationRepository;
+
+                var organization = organizationRepository.Find(x => x.Id == id && x.User.Email == email);
+                if (organization == null)
+                    return;
+
+                mapper.Map<OrganizationDto, Organization>(organizationDto, organization);
+                organizationRepository.Update(organization);
+                unitOfWork.Save();
             }
         }
     }

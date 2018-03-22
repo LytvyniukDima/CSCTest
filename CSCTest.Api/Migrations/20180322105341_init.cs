@@ -29,7 +29,7 @@ namespace CSCTest.Api.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Address = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Password = table.Column<string>(nullable: true),
                     Surname = table.Column<string>(nullable: true)
@@ -37,6 +37,7 @@ namespace CSCTest.Api.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                    table.UniqueConstraint("AK_Users_Email", x => x.Email);
                 });
 
             migrationBuilder.CreateTable(

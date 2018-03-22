@@ -11,7 +11,7 @@ namespace CSCTest.Api.Infrastructure
         {
             var builder = new DbContextOptionsBuilder<CSCDbContext>()
                 .UseSqlServer(connection);
-            services.AddScoped<IUnitOfWork>(provider => new EFUnitOfWork(builder.Options));
+            services.AddTransient<IUnitOfWork>(provider => new EFUnitOfWork(builder.Options));
 
             return services;
         }
