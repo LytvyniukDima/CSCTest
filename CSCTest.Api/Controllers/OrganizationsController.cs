@@ -16,7 +16,7 @@ namespace CSCTest.Api.Controllers
         {
             this.organizationService = organizationService;
         }
-        
+
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
@@ -34,12 +34,15 @@ namespace CSCTest.Api.Controllers
         [HttpPost]
         public void Post([FromBody]string value)
         {
+            string email = User.Identity.Name;
+
             organizationService.AddOrganization(new OrganizationDto
             {
                 Name = "Bla",
                 Code = "US",
                 Type = "Incorporated company"
-            });
+            },
+            email);
         }
 
         // PUT api/values/5

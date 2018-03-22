@@ -18,17 +18,14 @@ namespace CSCTest.Service.Concrete
             this.mapper = mapper;
         }
 
-        public void AddOrganization(OrganizationDto organizationDTO)
+        public void AddOrganization(OrganizationDto organizationDTO, string email)
         {       
             using (unitOfWork)
             {
                 var organizationRepository = unitOfWork.OrganizationRepository;
                 var userRepository = unitOfWork.UserRepository;
 
-                userRepository.Add(new User { Name = "One" });
-                unitOfWork.Save();
-
-                var user = userRepository.Find(x => x.Name == "One");
+                var user = userRepository.Find(x => x.Email == email);
 
                 var organization = mapper.Map<OrganizationDto, Organization>(organizationDTO);
                 organization.User = user;

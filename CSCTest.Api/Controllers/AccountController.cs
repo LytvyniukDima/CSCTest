@@ -32,12 +32,8 @@ namespace CSCTest.Api.Controllers
         public IActionResult RegisterUser([FromBody] RegistrationUserCredentials registrationUserCredentials)
         {
             accountService.RegisterUser(mapper.Map<RegistrationUserCredentials, UserRegistrationDto>(registrationUserCredentials));
-            
-            string token = accountService.CreateJwtToken(registrationUserCredentials.Email, registrationUserCredentials.Password);
-            if (token == null)
-                return BadRequest("Invalid username or password.");
 
-            return Ok(new { access_token = token});
+            return Ok();
         }
     }
 }

@@ -12,7 +12,7 @@ using System;
 namespace CSCTest.Api.Migrations
 {
     [DbContext(typeof(CSCDbContext))]
-    [Migration("20180321151109_init")]
+    [Migration("20180321190144_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,10 +66,6 @@ namespace CSCTest.Api.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("OrganizationId");
-
-                    b.HasIndex("Code", "OrganizationId")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
 
                     b.ToTable("Countries");
                 });
@@ -177,10 +173,6 @@ namespace CSCTest.Api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("[Code] IS NOT NULL");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Organizations");
@@ -202,10 +194,6 @@ namespace CSCTest.Api.Migrations
                     b.Property<string>("Surname");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Email")
-                        .IsUnique()
-                        .HasFilter("[Email] IS NOT NULL");
 
                     b.ToTable("Users");
                 });
