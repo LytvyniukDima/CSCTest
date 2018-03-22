@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,10 +24,15 @@ namespace CSCTest.Api.Infrastructure
                 
                 s.AddSecurityDefinition("Bearer", new ApiKeyScheme
                 {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                    Description = "Please insert JWT with Bearer into field. Example: Bearer {token}",
                     Name = "Authorization",
                     In = "header",
                     Type = "apiKey"
+                });
+
+                s.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
+                {
+                    { "Bearer", new string[]{}}
                 });
             });
 
