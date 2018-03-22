@@ -1,4 +1,4 @@
-namespace CSCTest.Service.DTOs
+namespace CSCTest.Service.DTOs.Users
 {
     public class UserRegistrationDto
     {

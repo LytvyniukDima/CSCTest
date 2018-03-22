@@ -6,6 +6,7 @@ using CSCTest.Tools.Extensions;
 using AutoMapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CSCTest.Service.DTOs.Organizations;
 
 namespace CSCTest.Service.Concrete
 {

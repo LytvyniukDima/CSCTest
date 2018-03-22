@@ -1,4 +1,4 @@
-namespace CSCTest.Service.DTOs
+namespace CSCTest.Service.DTOs.Countries
 {
     public class CreateCountryDto
     {

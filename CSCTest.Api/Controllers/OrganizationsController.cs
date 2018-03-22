@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CSCTest.Api.Models.Organizations;
 using CSCTest.Service.Abstract;
-using CSCTest.Service.DTOs;
+using CSCTest.Service.DTOs.Organizations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

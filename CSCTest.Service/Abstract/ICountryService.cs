@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using CSCTest.Service.DTOs;
+using CSCTest.Service.DTOs.Countries;
 
 namespace CSCTest.Service.Abstract
 {

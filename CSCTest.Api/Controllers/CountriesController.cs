@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CSCTest.Api.Models.Countries;
 using CSCTest.Service.Abstract;
-using CSCTest.Service.DTOs;
+using CSCTest.Service.DTOs.Countries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

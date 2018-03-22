@@ -7,7 +7,7 @@ using AutoMapper;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using CSCTest.Service.Abstract;
-using CSCTest.Service.DTOs;
+using CSCTest.Service.DTOs.Users;
 using CSCTest.Service.Infrastructure;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

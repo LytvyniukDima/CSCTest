@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CSCTest.Api.Models.Users;
 using CSCTest.Service.Abstract;
-using CSCTest.Service.DTOs;
+using CSCTest.Service.DTOs.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CSCTest.Api.Controllers

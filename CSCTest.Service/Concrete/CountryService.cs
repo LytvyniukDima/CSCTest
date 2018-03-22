@@ -4,7 +4,7 @@ using AutoMapper;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using CSCTest.Service.Abstract;
-using CSCTest.Service.DTOs;
+using CSCTest.Service.DTOs.Countries;
 
 namespace CSCTest.Service.Concrete
 {
@@ -34,7 +34,7 @@ namespace CSCTest.Service.Concrete
                 country.Organization = organization;
                 countryRepository.Add(country);
 
-                unitOfWork.Save();
+                await unitOfWork.SaveAsync();
             }
         }
 

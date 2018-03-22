@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using CSCTest.Service.DTOs;
+using CSCTest.Service.DTOs.Users;
 
 namespace CSCTest.Service.Abstract
 {

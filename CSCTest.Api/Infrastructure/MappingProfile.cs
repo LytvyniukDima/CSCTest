@@ -2,9 +2,13 @@ using AutoMapper;
 using CSCTest.Api.Models.Users;
 using CSCTest.Api.Models.Organizations;
 using CSCTest.Data.Entities;
-using CSCTest.Service.DTOs;
 using CSCTest.Tools.Extensions;
 using CSCTest.Api.Models.Countries;
+using CSCTest.Service.DTOs.Users;
+using CSCTest.Service.DTOs.Organizations;
+using CSCTest.Service.DTOs.Countries;
+using CSCTest.Service.DTOs.Businesses;
+using CSCTest.Api.Models.Businesses;
 
 namespace CSCTest.Api.Infrastructure
 {
@@ -30,6 +34,9 @@ namespace CSCTest.Api.Infrastructure
             CreateMap<Country, CountryDto>()
                 .ForMember("HasChildren", opt => opt.MapFrom(c => c.CountryBusinesses.Count > 0 ? true : false));
             CreateMap<CountryDto, CountryViewModel>();
+
+            CreateMap<Business, BusinessTypeDto>();
+            CreateMap<BusinessTypeDto, BusinessTypeViewModel>();
         }
     }
 }
