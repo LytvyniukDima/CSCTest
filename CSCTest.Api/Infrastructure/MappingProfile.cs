@@ -37,6 +37,11 @@ namespace CSCTest.Api.Infrastructure
 
             CreateMap<Business, BusinessTypeDto>();
             CreateMap<BusinessTypeDto, BusinessTypeViewModel>();
+
+            CreateMap<CountryBusiness, BusinessDto>()
+                .ForMember("Name", opt => opt.MapFrom(cb => cb.Business.Name))
+                .ForMember("HasChildren", opt => opt.MapFrom(cb => cb.BusinessFamilies.Count > 0 ? true : false));
+            CreateMap<BusinessDto, BusinessViewModel>();
         }
     }
 }

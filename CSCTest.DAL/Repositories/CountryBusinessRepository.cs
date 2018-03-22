@@ -28,7 +28,8 @@ namespace CSCTest.DAL.Repositories
 
         public void AddRange(IEnumerable<CountryBusiness> entities)
         {
-            dbSet.AddRange(entities);
+            foreach (var entity in entities)
+                Add(entity);
         }
 
         public void Delete(CountryBusiness entity)

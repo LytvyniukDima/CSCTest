@@ -1,6 +1,6 @@
-namespace CSCTest.Api.Models.Businesses
+namespace CSCTest.Service.DTOs.Businesses
 {
-    public class BusinessViewModel
+    public class BusinessDto
     {
         public int Id { get; set; }
         public string Name { get; set; }

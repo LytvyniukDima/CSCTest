@@ -48,6 +48,47 @@ namespace CSCTest.Service.Concrete
             }
         }
 
+        public async Task<BusinessDto> GetBusinessAsync(int id)
+        {
+            using (unitOfWork)
+            {
+                var countryBusinessRepository = unitOfWork.CountryBusinessRepository;
+
+                var business = await countryBusinessRepository.FindAsync(x => x.Id == id);
+                if (business == null)
+                    return null;
+
+                return mapper.Map<CountryBusiness, BusinessDto>(business);
+            }
+        }
+
+        public async Task<IEnumerable<BusinessDto>> GetBusinessesAsync()
+        {
+            using (unitOfWork)
+            {
+                var countryBusinessRepository = unitOfWork.CountryBusinessRepository;
+
+                var businesses = await countryBusinessRepository.GetAllAsync();
+
+                return mapper.Map<IEnumerable<CountryBusiness>, IEnumerable<BusinessDto>>(businesses);
+            }
+        }
+
+        public async Task DeleteBusinessAsync(int id, string email)
+        {
+            using (unitOfWork)
+            {
+                var countryBusinessRepository = unitOfWork.CountryBusinessRepository;
+
+                var business = await countryBusinessRepository.FindAsync(x => x.Id == id && x.Country.Organization.User.Email == email);
+                if (business == null)
+                    return;
+
+                countryBusinessRepository.Delete(business);
+                await unitOfWork.SaveAsync();
+            }
+        }
+
         public async Task AddBusinessTypeAsync(string name)
         {
             using (unitOfWork)

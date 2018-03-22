@@ -6,6 +6,6 @@ namespace CSCTest.Api.Models.Countries
         public string Name { get; set; }
         public string Code { get; set; }
         public int OrganizationId { get; set; }
-        public bool HasChildern { get; set; }
+        public bool HasChildren { get; set; }
     }
 }
