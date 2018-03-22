@@ -50,6 +50,12 @@ namespace CSCTest.Api.Controllers
             return Ok(mapper.Map<BusinessTypeDto, BusinessTypeViewModel>(businessType));
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody]string name)
+        {
+            await businessService.UpdateBusinessTypeAsync(id, name);
 
+            return Ok();
+        }
     }
 }

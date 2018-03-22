@@ -92,5 +92,21 @@ namespace CSCTest.Service.Concrete
                 return mapper.Map<IEnumerable<Business>, IEnumerable<BusinessTypeDto>>(businesses);
             }
         }
+
+        public async Task UpdateBusinessTypeAsync(int id, string name)
+        {
+            using (unitOfWork)
+            {
+                var businessRepository = unitOfWork.BussinessRepository;
+
+                var business = await businessRepository.FindAsync(x => x.Id == id);
+                if (business == null)
+                    return;
+                business.Name = name;
+
+                businessRepository.Update(business);
+                await unitOfWork.SaveAsync();
+            }
+        }
     }
 }

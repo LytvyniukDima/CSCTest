@@ -84,6 +84,10 @@ namespace CSCTest.DAL.Repositories
 
         public void Update(Business entity)
         {
+            var business = Find(x => x.Name == entity.Name && x.Id != entity.Id);
+            if (business != null)
+                return;
+                
             dbContext.Entry(entity).State = EntityState.Modified;
         }
     }
