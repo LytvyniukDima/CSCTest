@@ -32,6 +32,7 @@ namespace CSCTest.Api
             services.AddScoped<IBusinessService, BusinessService>();
             services.AddScoped<IFamilyService, FamilyService>();
             services.AddScoped<IOfferingService, OfferingService>();
+            services.AddScoped<IDepartmentService, DepartmentService>();
             
             services.AddAutoMapper(x => x.AddProfile(new MappingProfile()));
 

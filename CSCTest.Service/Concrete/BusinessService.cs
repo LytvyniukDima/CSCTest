@@ -74,6 +74,18 @@ namespace CSCTest.Service.Concrete
             }
         }
 
+        public IEnumerable<BusinessDto> GetCountryBusinesses(int countryId)
+        {
+            using (unitOfWork)
+            {
+                var countryBusinessRepository = unitOfWork.CountryBusinessRepository;
+
+                var businesses = countryBusinessRepository.FindAll(x => x.CountryId == countryId);
+
+                return mapper.Map<IEnumerable<CountryBusiness>, IEnumerable<BusinessDto>>(businesses);
+            }
+        }
+
         public async Task DeleteBusinessAsync(int id, string email)
         {
             using (unitOfWork)

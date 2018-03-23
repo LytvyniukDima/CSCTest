@@ -40,7 +40,7 @@ namespace CSCTest.Api.Controllers
                 return NotFound();
 
             var familyViewModel = mapper.Map<FamilyDto, FamilyViewModel>(family);
-            return Ok(familyViewModel); 
+            return Ok(familyViewModel);
         }
 
         [AllowAnonymous]
@@ -49,8 +49,18 @@ namespace CSCTest.Api.Controllers
         {
             IEnumerable<FamilyDto> families = await familyService.GetFamiliesAsync();
             var familyViewModels = mapper.Map<IEnumerable<FamilyDto>, IEnumerable<FamilyViewModel>>(families);
-            
-            return Ok(familyViewModels); 
+
+            return Ok(familyViewModels);
+        }
+
+        [AllowAnonymous]
+        [HttpGet("~/api/businesses/{businessId}/families")]
+        public async Task<IActionResult> GetBusinessFamiles(int businessId)
+        {
+            IEnumerable<FamilyDto> families = familyService.GetBusinessFamilies(businessId);
+            var familyViewModels = mapper.Map<IEnumerable<FamilyDto>, IEnumerable<FamilyViewModel>>(families);
+
+            return Ok(familyViewModels);
         }
 
         [HttpDelete("{id}")]

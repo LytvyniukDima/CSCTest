@@ -9,6 +9,7 @@ namespace CSCTest.Service.Abstract
         Task AddFamilyAsync(int countryBusinessId, string name, string email);
         Task<FamilyDto> GetFamilyAsync(int businessFamilyId);
         Task<IEnumerable<FamilyDto>> GetFamiliesAsync();
+        IEnumerable<FamilyDto> GetBusinessFamilies(int countryBusinessId);
         Task DeleteFamilyAsync(int id, string email);        
 
         Task AddFamilyTypeAsync(FamilyTypeCreateDto familyCreateDto);

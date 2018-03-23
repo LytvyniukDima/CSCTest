@@ -9,6 +9,7 @@ namespace CSCTest.Service.Abstract
         Task AddBusiness(int countryId, string name, string email);
         Task<BusinessDto> GetBusinessAsync(int id);
         Task<IEnumerable<BusinessDto>> GetBusinessesAsync();
+        IEnumerable<BusinessDto> GetCountryBusinesses(int countryId);
         Task DeleteBusinessAsync(int id, string email);
         
         Task AddBusinessTypeAsync(string name);

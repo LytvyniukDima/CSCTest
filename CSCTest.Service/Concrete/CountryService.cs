@@ -18,7 +18,7 @@ namespace CSCTest.Service.Concrete
             this.unitOfWork = unitOfWork;
             this.mapper = mapper;
         }
-        
+
         public async Task AddCountryAsync(int organizationId, CreateCountryDto createCountryDto, string email)
         {
             using (unitOfWork)
@@ -29,7 +29,7 @@ namespace CSCTest.Service.Concrete
                 var organization = await organizationRepository.FindAsync(x => x.Id == organizationId && x.User.Email == email);
                 if (organization == null)
                     return;
-                
+
                 var country = mapper.Map<CreateCountryDto, Country>(createCountryDto);
                 country.Organization = organization;
                 countryRepository.Add(country);
@@ -47,7 +47,7 @@ namespace CSCTest.Service.Concrete
                 var country = await countryRepository.FindAsync(x => x.Id == id);
                 if (country == null)
                     return null;
-                
+
                 var countryDto = mapper.Map<Country, CountryDto>(country);
 
                 return countryDto;
@@ -67,16 +67,29 @@ namespace CSCTest.Service.Concrete
             }
         }
 
+        public IEnumerable<CountryDto> GetOrganizationCountries(int organizationId)
+        {
+            using (unitOfWork)
+            {
+                var countryRepository = unitOfWork.CountryRepository;
+
+                var countries = countryRepository.FindAll(x => x.OrganizationId == organizationId);
+                var countryDtos = mapper.Map<IEnumerable<Country>, IEnumerable<CountryDto>>(countries);
+
+                return countryDtos;
+            }
+        }
+
         public async Task UpdateCountryAsync(int id, CreateCountryDto createCountryDto, string email)
         {
             using (unitOfWork)
             {
                 var countryRepository = unitOfWork.CountryRepository;
-                
+
                 var country = await countryRepository.FindAsync(x => x.Id == id && x.Organization.User.Email == email);
                 if (country == null)
                     return;
-                
+
                 mapper.Map<CreateCountryDto, Country>(createCountryDto, country);
                 countryRepository.Update(country);
                 await unitOfWork.SaveAsync();
@@ -88,7 +101,7 @@ namespace CSCTest.Service.Concrete
             using (unitOfWork)
             {
                 var countryRepository = unitOfWork.CountryRepository;
-                
+
                 var country = await countryRepository.FindAsync(x => x.Id == id && x.Organization.User.Email == email);
                 if (country == null)
                     return;

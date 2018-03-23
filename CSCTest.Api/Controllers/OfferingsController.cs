@@ -53,6 +53,16 @@ namespace CSCTest.Api.Controllers
             return Ok(offeringViewModels);
         }
 
+        [AllowAnonymous]
+        [HttpGet("~/api/families/{familyId}/offerings")]
+        public async Task<IActionResult> GetFamilyOfferings(int familyId)
+        {
+            IEnumerable<OfferingDto> offerings = offeringService.GetFamilyOfferings(familyId);
+            
+            var offeringViewModels = mapper.Map<IEnumerable<OfferingDto>, IEnumerable<OfferingViewModel>>(offerings);
+            return Ok(offeringViewModels);
+        }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -95,6 +95,16 @@ namespace CSCTest.Service.Concrete
             }
         }
 
+        public IEnumerable<OfferingDto> GetFamilyOfferings(int businessFamilyId)
+        {
+            using(unitOfWork)
+            {
+                var familyOfferingRepository = unitOfWork.FamilyOfferingRepository;
+                var familyOfferings= familyOfferingRepository.FindAll(x => x.BusinessFamilyId == businessFamilyId);
+                return mapper.Map<IEnumerable<FamilyOffering>, IEnumerable<OfferingDto>>(familyOfferings);
+            }
+        }
+
         public async Task<IEnumerable<OfferingDto>> GetOferringsAsync()
         {
             using(unitOfWork)

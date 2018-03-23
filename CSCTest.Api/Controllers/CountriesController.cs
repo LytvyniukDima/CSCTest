@@ -44,6 +44,16 @@ namespace CSCTest.Api.Controllers
             return Ok(countryViewModel);
         }
 
+        [AllowAnonymous]
+        [HttpGet("~/api/organizations/{organizationId}/countries")]
+        public async Task<IActionResult> GetOrganizationCountries(int organizationId)
+        {
+            var countries = countryService.GetOrganizationCountries(organizationId);
+            var countryViewModels = mapper.Map<IEnumerable<CountryDto>, IEnumerable<CountryViewModel>>(countries);
+
+            return Ok(countryViewModels);
+        }
+
         [HttpPost("~/api/organizations/{organizationId}/countries")]
         public async Task<IActionResult> Post(int organizationId, [FromBody]CreateCountryModel createCountryModel)
         {

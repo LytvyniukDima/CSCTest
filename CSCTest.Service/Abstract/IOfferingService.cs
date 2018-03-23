@@ -9,6 +9,7 @@ namespace CSCTest.Service.Abstract
         Task AddOfferingAsync(int businessFamilyId, string name, string email);
         Task<OfferingDto> GetOfferingAsync(int familyOfferingId);
         Task<IEnumerable<OfferingDto>> GetOferringsAsync();
+        IEnumerable<OfferingDto> GetFamilyOfferings(int businessFamilyId);
         Task DeleteOfferingAsync(int id, string email);        
 
         Task AddOfferingTypeAsync(OfferingTypeCreateDto offeringCreateDto);

@@ -96,8 +96,18 @@ namespace CSCTest.Service.Concrete
                 return mapper.Map<BusinessFamily, FamilyDto>(businessFamily);
             }
         }
-
         
+        public IEnumerable<FamilyDto> GetBusinessFamilies(int countryBusinessId)
+        {
+            using (unitOfWork)
+            {
+                var businessFamilyRepository = unitOfWork.BusinessFamilyRepository;
+                var businessFamilies = businessFamilyRepository.FindAll(x => x.CountryBusinessId == countryBusinessId);
+                return mapper.Map<IEnumerable<BusinessFamily>, IEnumerable<FamilyDto>>(businessFamilies);
+            }
+        }
+
+
         public async Task AddFamilyTypeAsync(FamilyTypeCreateDto familyCreateDto)
         {
             using (unitOfWork)

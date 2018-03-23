@@ -23,7 +23,7 @@ namespace CSCTest.Api.Controllers
         }
 
         [HttpPost("~/api/business_types/{businessTypeId}/family_types")]
-        public async Task<IActionResult> Post(int businessTypeId, string name)
+        public async Task<IActionResult> Post(int businessTypeId, [FromBody]string name)
         {
             await familyService.AddFamilyTypeAsync(new FamilyTypeCreateDto { 
                 Name = name,

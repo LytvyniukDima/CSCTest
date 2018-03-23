@@ -53,6 +53,16 @@ namespace CSCTest.Api.Controllers
             return Ok(businessViewModels);
         }
 
+        [AllowAnonymous]
+        [HttpGet("~/api/countries/{countryId}/businesses")]
+        public async Task<IActionResult> GetCountryBusiness(int countryId)
+        {
+            var businesses = businessService.GetCountryBusinesses(countryId);
+            var businessViewModels = mapper.Map<IEnumerable<BusinessDto>, IEnumerable<BusinessViewModel>>(businesses);
+
+            return Ok(businessViewModels);
+        }
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

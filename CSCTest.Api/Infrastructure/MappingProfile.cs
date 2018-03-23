@@ -13,6 +13,8 @@ using CSCTest.Service.DTOs.Families;
 using CSCTest.Api.Models.Families;
 using CSCTest.Service.DTOs.Offerings;
 using CSCTest.Api.Models.Offerings;
+using CSCTest.Service.DTOs.Departments;
+using CSCTest.Api.Models.Departments;
 
 namespace CSCTest.Api.Infrastructure
 {
@@ -64,6 +66,10 @@ namespace CSCTest.Api.Infrastructure
                 .ForMember("FamilyId", opt => opt.MapFrom(fo => fo.BusinessFamily.Id))
                 .ForMember("HasChildren", opt => opt.MapFrom(fo => fo.Departments.Count > 0 ? true : false));
             CreateMap<OfferingDto, OfferingViewModel>();
+
+            CreateMap<Department, DepartmentDto>()
+                .ForMember("OfferingId", opt => opt.MapFrom(d => d.FamilyOfferingId));
+            CreateMap<DepartmentDto, DepartmentViewModel>();
         }
     }
 }
