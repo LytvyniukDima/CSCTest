@@ -124,17 +124,13 @@ namespace CSCTest.Api.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("BusinessFamilyId");
-
-                    b.Property<int>("BussinessFamilyId");
+                    b.Property<int>("BusinessFamilyId");
 
                     b.Property<int>("OfferingId");
 
                     b.HasKey("Id");
 
-                    b.HasAlternateKey("BussinessFamilyId", "OfferingId");
-
-                    b.HasIndex("BusinessFamilyId");
+                    b.HasAlternateKey("BusinessFamilyId", "OfferingId");
 
                     b.HasIndex("OfferingId");
 
@@ -254,12 +250,13 @@ namespace CSCTest.Api.Migrations
                 {
                     b.HasOne("CSCTest.Data.Entities.BusinessFamily", "BusinessFamily")
                         .WithMany("FamilyOfferings")
-                        .HasForeignKey("BusinessFamilyId");
+                        .HasForeignKey("BusinessFamilyId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("CSCTest.Data.Entities.Offering", "Offering")
                         .WithMany("FamilyOfferings")
                         .HasForeignKey("OfferingId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 
             modelBuilder.Entity("CSCTest.Data.Entities.Offering", b =>

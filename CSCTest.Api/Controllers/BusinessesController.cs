@@ -27,12 +27,7 @@ namespace CSCTest.Api.Controllers
         {
             string email = User.Identity.Name;
 
-            await businessService.AddBusiness(
-                countryId,
-                businessName,
-                email
-            );
-
+            await businessService.AddBusiness(countryId, businessName, email);
             return Ok();
         }
 
@@ -43,7 +38,7 @@ namespace CSCTest.Api.Controllers
             var business = await businessService.GetBusinessAsync(id);
             if (business == null)
                 return NotFound();
-            
+
             var businessViewModel = mapper.Map<BusinessDto, BusinessViewModel>(business);
             return Ok(businessViewModel);
         }

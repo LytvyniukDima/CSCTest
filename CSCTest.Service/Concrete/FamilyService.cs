@@ -19,6 +19,85 @@ namespace CSCTest.Service.Concrete
             this.mapper = mapper;
         }
 
+        public async Task AddFamilyAsync(int countryBusinessId, string name, string email)
+        {
+            using (unitOfWork)
+            {
+                var countryBusinessRepository = unitOfWork.CountryBusinessRepository;
+                var familyRepository = unitOfWork.FamilyRepository;
+                var businessFamilyRepository = unitOfWork.BusinessFamilyRepository;
+
+                var countryBusiness = await countryBusinessRepository.FindAsync(
+                    x => x.Id == countryBusinessId &&
+                    x.Country.Organization.User.Email == email
+                );
+                if (countryBusiness == null)
+                    return;
+
+                var family = await familyRepository.FindAsync(
+                    x => x.Name == name &&
+                    x.BusinessId == countryBusiness.BusinessId
+                );
+                if (family == null)
+                {
+                    family = new Family
+                    {
+                        Name = name,
+                        Business = countryBusiness.Business
+                    };
+                }
+
+                businessFamilyRepository.Add(new BusinessFamily
+                {
+                    Family = family,
+                    CountryBusiness = countryBusiness
+                });
+                await unitOfWork.SaveAsync();
+            }
+        }
+
+        public async Task DeleteFamilyAsync(int id, string email)
+        {
+            using (unitOfWork)
+            {
+                var businessFamilyRepository = unitOfWork.BusinessFamilyRepository;
+
+                var businessFamily = await businessFamilyRepository.FindAsync(
+                    x => x.Id == id &&
+                    x.CountryBusiness.Country.Organization.User.Email == email
+                );
+                if (businessFamily == null)
+                    return;
+                
+                businessFamilyRepository.Delete(businessFamily);
+                await unitOfWork.SaveAsync();
+            }
+        }
+
+        public async Task<IEnumerable<FamilyDto>> GetFamiliesAsync()
+        {
+            using (unitOfWork)
+            {
+                var businessFamilyRepository = unitOfWork.BusinessFamilyRepository;
+                var businessFamilies = await businessFamilyRepository.GetAllAsync();
+                return mapper.Map<IEnumerable<BusinessFamily>, IEnumerable<FamilyDto>>(businessFamilies);
+            }
+        }
+
+        public async Task<FamilyDto> GetFamilyAsync(int businessFamilyId)
+        {
+            using (unitOfWork)
+            {
+                var businessFamilyRepository = unitOfWork.BusinessFamilyRepository;
+                
+                var businessFamily = await businessFamilyRepository.FindAsync(x => x.Id == businessFamilyId);
+                if (businessFamily == null)
+                    return null;
+                return mapper.Map<BusinessFamily, FamilyDto>(businessFamily);
+            }
+        }
+
+        
         public async Task AddFamilyTypeAsync(FamilyTypeCreateDto familyCreateDto)
         {
             using (unitOfWork)
@@ -48,7 +127,7 @@ namespace CSCTest.Service.Concrete
                 var family = await familyRepository.FindAsync(x => x.Id == id);
                 if (family == null)
                     return null;
-                
+
                 return mapper.Map<Family, FamilyTypeDto>(family);
             }
         }
@@ -73,7 +152,7 @@ namespace CSCTest.Service.Concrete
                 var family = await familyRepository.FindAsync(x => x.Id == id);
                 if (family == null)
                     return;
-                
+
                 family.Name = name;
                 familyRepository.Update(family);
                 await unitOfWork.SaveAsync();

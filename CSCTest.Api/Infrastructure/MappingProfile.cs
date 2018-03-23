@@ -11,6 +11,8 @@ using CSCTest.Service.DTOs.Businesses;
 using CSCTest.Api.Models.Businesses;
 using CSCTest.Service.DTOs.Families;
 using CSCTest.Api.Models.Families;
+using CSCTest.Service.DTOs.Offerings;
+using CSCTest.Api.Models.Offerings;
 
 namespace CSCTest.Api.Infrastructure
 {
@@ -45,10 +47,23 @@ namespace CSCTest.Api.Infrastructure
                 .ForMember("HasChildren", opt => opt.MapFrom(cb => cb.BusinessFamilies.Count > 0 ? true : false));
             CreateMap<BusinessDto, BusinessViewModel>();
 
-            CreateMap<FamilyTypeCreateDto, Family>();
             CreateMap<Family, FamilyTypeDto>()
                 .ForMember("BusinessName", opt => opt.MapFrom(f => f.Business.Name));
             CreateMap<FamilyTypeDto, FamilyTypeViewModel>();
+            CreateMap<BusinessFamily, FamilyDto>()
+                .ForMember("Name", opt => opt.MapFrom(bf => bf.Family.Name))
+                .ForMember("BusinessId", opt => opt.MapFrom(bf => bf.CountryBusinessId))
+                .ForMember("HasChildren", opt => opt.MapFrom(bf => bf.FamilyOfferings.Count > 0 ? true : false));
+            CreateMap<FamilyDto, FamilyViewModel>();
+
+            CreateMap<Offering, OfferingTypeDto>()
+                .ForMember("FamilyName", opt => opt.MapFrom(o => o.Family.Name));
+            CreateMap<OfferingTypeDto, OfferingViewModel>();
+            CreateMap<FamilyOffering, OfferingDto>()
+                .ForMember("Name", opt => opt.MapFrom(fo => fo.Offering.Name))
+                .ForMember("FamilyId", opt => opt.MapFrom(fo => fo.BusinessFamily.Id))
+                .ForMember("HasChildren", opt => opt.MapFrom(fo => fo.Departments.Count > 0 ? true : false));
+            CreateMap<OfferingDto, OfferingViewModel>();
         }
     }
 }

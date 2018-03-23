@@ -36,13 +36,18 @@ namespace CSCTest.DAL.EF
 
             // ManyToMany(BusinessFamily, Offering)
             modelBuilder.Entity<FamilyOffering>()
-                .HasAlternateKey(fo => new { fo.BussinessFamilyId, fo.OfferingId });
+                .HasAlternateKey(fo => new { fo.BusinessFamilyId, fo.OfferingId });
 
             modelBuilder.Entity<BusinessFamily>()
                 .HasOne(bf => bf.Family)
                 .WithMany(f => f.BusinessFamilies)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<FamilyOffering>()
+                .HasOne(fo => fo.Offering)
+                .WithMany(o => o.FamilyOfferings)
+                .OnDelete(DeleteBehavior.Restrict);
+                
             modelBuilder.Entity<User>()
                 .HasAlternateKey(u => u.Email);
         }

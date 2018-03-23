@@ -6,6 +6,11 @@ namespace CSCTest.Service.Abstract
 {
     public interface IFamilyService
     {
+        Task AddFamilyAsync(int countryBusinessId, string name, string email);
+        Task<FamilyDto> GetFamilyAsync(int businessFamilyId);
+        Task<IEnumerable<FamilyDto>> GetFamiliesAsync();
+        Task DeleteFamilyAsync(int id, string email);        
+
         Task AddFamilyTypeAsync(FamilyTypeCreateDto familyCreateDto);
         Task<FamilyTypeDto> GetFamilyTypeAsync(int id);
         Task<IEnumerable<FamilyTypeDto>> GetFamilyTypesAsync();

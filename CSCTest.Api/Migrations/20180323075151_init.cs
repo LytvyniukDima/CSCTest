@@ -183,26 +183,25 @@ namespace CSCTest.Api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    BusinessFamilyId = table.Column<int>(nullable: true),
-                    BussinessFamilyId = table.Column<int>(nullable: false),
+                    BusinessFamilyId = table.Column<int>(nullable: false),
                     OfferingId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FamilyOfferings", x => x.Id);
-                    table.UniqueConstraint("AK_FamilyOfferings_BussinessFamilyId_OfferingId", x => new { x.BussinessFamilyId, x.OfferingId });
+                    table.UniqueConstraint("AK_FamilyOfferings_BusinessFamilyId_OfferingId", x => new { x.BusinessFamilyId, x.OfferingId });
                     table.ForeignKey(
                         name: "FK_FamilyOfferings_BusinessFamilies_BusinessFamilyId",
                         column: x => x.BusinessFamilyId,
                         principalTable: "BusinessFamilies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_FamilyOfferings_Offerings_OfferingId",
                         column: x => x.OfferingId,
                         principalTable: "Offerings",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,11 +248,6 @@ namespace CSCTest.Api.Migrations
                 name: "IX_Families_BusinessId",
                 table: "Families",
                 column: "BusinessId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FamilyOfferings_BusinessFamilyId",
-                table: "FamilyOfferings",
-                column: "BusinessFamilyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FamilyOfferings_OfferingId",
