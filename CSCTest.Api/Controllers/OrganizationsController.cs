@@ -28,7 +28,7 @@ namespace CSCTest.Api.Controllers
         {
             var organizations = await organizationService.GetOrganizationsAsync();
 
-            var organizationViewModels = mapper.Map<IEnumerable<OrganizationDto>, IEnumerable<OrganizationViewModel>>(organizations);
+            var organizationViewModels = mapper.Map<IEnumerable<OrganizationDto>, IEnumerable<OrganizationTreeViewModel>>(organizations);
 
             return Ok(organizationViewModels);
         }

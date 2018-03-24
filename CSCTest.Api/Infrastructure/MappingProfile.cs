@@ -34,12 +34,18 @@ namespace CSCTest.Api.Infrastructure
                 .ForMember("HasChildren", opt => opt.MapFrom(o => o.Countries.Count > 0 ? true : false));
             CreateMap<CreateOrganizationModel, OrganizationDto>();
             CreateMap<OrganizationDto, OrganizationViewModel>();
+            CreateMap<OrganizationDto, OrganizationTreeViewModel>()
+                .ForMember("OrganizationId", opt => opt.MapFrom(o => o.Id))
+                .ForMember("Text", opt => opt.MapFrom(o => o.Name));
 
             CreateMap<CreateCountryModel, CreateCountryDto>();
             CreateMap<CreateCountryDto, Country>();
             CreateMap<Country, CountryDto>()
                 .ForMember("HasChildren", opt => opt.MapFrom(c => c.CountryBusinesses.Count > 0 ? true : false));
             CreateMap<CountryDto, CountryViewModel>();
+            CreateMap<CountryDto, CountryTreeViewModel>()
+                .ForMember("CountryId", opt => opt.MapFrom(c => c.Id))
+                .ForMember("Text", opt => opt.MapFrom(c => c.Name));
 
             CreateMap<Business, BusinessTypeDto>();
             CreateMap<BusinessTypeDto, BusinessTypeViewModel>();
@@ -48,7 +54,7 @@ namespace CSCTest.Api.Infrastructure
                 .ForMember("Name", opt => opt.MapFrom(cb => cb.Business.Name))
                 .ForMember("HasChildren", opt => opt.MapFrom(cb => cb.BusinessFamilies.Count > 0 ? true : false));
             CreateMap<BusinessDto, BusinessViewModel>();
-
+            
             CreateMap<Family, FamilyTypeDto>()
                 .ForMember("BusinessName", opt => opt.MapFrom(f => f.Business.Name));
             CreateMap<FamilyTypeDto, FamilyTypeViewModel>();

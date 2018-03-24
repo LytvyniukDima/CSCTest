@@ -39,7 +39,8 @@ namespace CSCTest.Api
             services.AddJwtAthorization(Configuration.GetSection("AuthOptions"));
             services.AddSwaggerDocumentation();
             services.AddEFUnitOfWork(Configuration.GetConnectionString("DefaultConnection"));
-            
+            services.AddCorsSettings();
+
             services.AddMvc();
 
             services.AddDbContext<CSCDbContext>(options =>
@@ -54,6 +55,7 @@ namespace CSCTest.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCorsSettings();
             app.UseAuthentication();
             app.UseMvc();
             app.UseSwaggerDocumentation();
