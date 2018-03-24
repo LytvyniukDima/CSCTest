@@ -2,6 +2,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CSCTest.Data\CSCTest.Data.csproj" />
+    <ProjectReference Include="..\CSCTest.DAL\CSCTest.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.0.1" />
   </ItemGroup>
 
   <PropertyGroup>

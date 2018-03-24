@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore;
+﻿using System;
+using CSCTest.DAL.EF;
+using CSCTest.Tools.DbTools;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace CSCTest.Api
 {
@@ -7,7 +12,23 @@ namespace CSCTest.Api
     {
         public static void Main(string[] args)
         {
-            BuildWebHost(args).Run();
+            var host = BuildWebHost(args);
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var context = services.GetRequiredService<CSCDbContext>();
+                    DbInitializer.Initialize(context);
+                }
+                catch (Exception ex)
+                {
+                    
+                }
+            }
+
+            host.Run();
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
