@@ -32,3 +32,11 @@
 .hidden {
     visibility: hidden;
 }
+
+.buttonContainer {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}

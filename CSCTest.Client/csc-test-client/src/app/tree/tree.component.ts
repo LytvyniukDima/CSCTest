@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 
 import { TreeService } from '../tree.service';
 import { Organization } from '../models/organization';
@@ -10,6 +10,7 @@ import { Business } from '../models/business';
 import { Family } from '../models/family';
 import { Offering } from '../models/offering';
 import { Department } from '../models/department';
+import { DxTreeViewComponent } from 'devextreme-angular';
 
 declare let require: any;
 
@@ -19,6 +20,8 @@ declare let require: any;
   styleUrls: ['./tree.component.css']
 })
 export class TreeComponent implements OnInit {
+  @ViewChild(DxTreeViewComponent) treeView: DxTreeViewComponent;
+  
   organizationNameId = "organization_";
   countryNameId = "country_";
   businessNameId = "business_";
@@ -26,17 +29,44 @@ export class TreeComponent implements OnInit {
   offeringNameId = "offering_";
   departmentNameId = "department_";
 
+  expandIndex = -1;
+
   constructor(private service: TreeService) {
   }
 
-  selectItem(e) {
+  startExpandAll() {
+    this.expandIndex = 0;
+    this.expandAll();
+  }
 
+  expandAll() {
+    let nodes = this.treeView.items;
+    for (var i = this.expandIndex; i < nodes.length; i++) {
+      if (nodes[i].hasItems)
+        this.treeView.instance.expandItem(nodes[i]);
+    }
+    this.expandIndex = nodes.length;
+  }
+
+  expandedItem(e) {
+    if (this.expandIndex == -1)
+      return;
+    this.expandAll();
+  }
+  
+  collapseAll() {
+    var nodes = this.treeView.items;
+    for (let node of nodes) {
+      this.treeView.instance.collapseItem(node);
+    }
   }
 
   createChildren = async (parent) => {
     if (parent === null)
       return await this.getOrganizations();
-
+    if (parent.itemData === undefined)
+      return;
+    
     switch (parent.itemData.id) {
       case this.organizationNameId + parent.itemData.serverId: {
         return await this.getOrganizationCountries(parent.itemData.serverId);
@@ -57,7 +87,7 @@ export class TreeComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    
   }
 
   async getOrganizations() {
@@ -73,7 +103,7 @@ export class TreeComponent implements OnInit {
         id: this.organizationNameId + organization.id,
         parentId: "",
         text: organization.name,
-        hasChildren: organization.hasChildren,
+        hasItems: organization.hasChildren,
         serverId: organization.id
       };
     });
@@ -92,7 +122,7 @@ export class TreeComponent implements OnInit {
         id: this.countryNameId + country.id,
         parentId: this.organizationNameId + country.organizationId,
         text: country.name,
-        hasChildren: country.hasChildren,
+        hasItems: country.hasChildren,
         serverId: country.id
       };
     });
@@ -111,7 +141,7 @@ export class TreeComponent implements OnInit {
         id: this.businessNameId + business.id,
         parentId: this.countryNameId + business.countryId,
         text: business.name,
-        hasChildren: business.hasChildren,
+        hasItems: business.hasChildren,
         serverId: business.id
       };
     });
@@ -130,7 +160,7 @@ export class TreeComponent implements OnInit {
         id: this.familyNameId + family.id,
         parentId: this.businessNameId + family.businessId,
         text: family.name,
-        hasChildren: family.hasChildren,
+        hasItems: family.hasChildren,
         serverId: family.id
       }
     })
@@ -149,7 +179,7 @@ export class TreeComponent implements OnInit {
         id: this.offeringNameId + offering.id,
         parentId: this.familyNameId + offering.familyId,
         text: offering.name,
-        hasChildren: offering.hasChildren,
+        hasItems: offering.hasChildren,
         serverId: offering.id
       }
     });
@@ -162,13 +192,12 @@ export class TreeComponent implements OnInit {
       .then(data => {
         departments = data;
       });
-
     return departments.map((department) => {
       return {
         id: this.departmentNameId + department.id,
         parentId: this.offeringNameId + department.offeringId,
         text: department.name,
-        hasChildren: false,
+        hasItems: false,
         serverId: department.id
       }
     });

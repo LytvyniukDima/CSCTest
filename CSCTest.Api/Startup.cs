@@ -38,13 +38,13 @@ namespace CSCTest.Api
 
             services.AddJwtAthorization(Configuration.GetSection("AuthOptions"));
             services.AddSwaggerDocumentation();
-            services.AddEFUnitOfWork(Configuration.GetConnectionString("DefaultConnection"));
+            services.AddEFUnitOfWork(Configuration.GetConnectionString("AzureConnection"));
             services.AddCorsSettings();
 
             services.AddMvc();
 
             services.AddDbContext<CSCDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("CSCTest.Api")));
+                options.UseSqlServer(Configuration.GetConnectionString("AzureConnection"), b => b.MigrationsAssembly("CSCTest.Api")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

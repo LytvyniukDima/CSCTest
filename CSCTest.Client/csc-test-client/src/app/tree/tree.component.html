@@ -1,10 +1,15 @@
+<div class="buttonContainer">
+  <button (click)="startExpandAll()">Expand All</button>
+  <button (click)="collapseAll()">Collapse All</button>
+</div>
+
 <div class="form">
   <dx-tree-view id="simple-treeview"
     [width]="300"
     [createChildren]="createChildren"
+    (onItemExpanded)="expandedItem($event)"
     [animationEnabled]="false"
     rootValue=""
-    dataStructure="plain"
-    hasItemsExpr="hasChildren">
+    dataStructure="plain">
   </dx-tree-view>
 </div>
