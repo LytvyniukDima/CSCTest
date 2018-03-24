@@ -1,5 +1,7 @@
-import { BaseType } from "./base-type";
-
-export class Country extends BaseType {
-    countryId: number;
+export class Country {
+    id: number;
+    name: string;
+    code: string;
+    organizationId: number;
+    hasChildren: boolean;
 }

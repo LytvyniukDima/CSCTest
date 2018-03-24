@@ -3,4 +3,5 @@ export class BaseType {
     text: string;
     hasChildren: boolean;
     parentId: string = "";
+    dataId: number;
 }
