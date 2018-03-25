@@ -23,6 +23,10 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Business entity)
         {
+            var business = Find(x => x.Name == entity.Name);
+            if (business != null)
+                return;
+                
             dbSet.Add(entity);
         }
 

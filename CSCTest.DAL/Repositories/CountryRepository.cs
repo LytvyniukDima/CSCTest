@@ -23,7 +23,7 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Country entity)
         {
-            var country = Find(x => x.Code == entity.Code && x.OrganizationId == entity.OrganizationId);
+            var country = Find(x => x.Code == entity.Code && x.Organization == entity.Organization);
             if (country != null)
                 return;
 

@@ -23,6 +23,10 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Family entity)
         {
+            var family = Find(x => x.Name == entity.Name && x.Business == entity.Business);
+            if (family != null)
+                return;
+
             dbSet.Add(entity);
         }
 
@@ -90,6 +94,10 @@ namespace CSCTest.DAL.Repositories
 
         public void Update(Family entity)
         {
+            var family = Find(x => x.Name == entity.Name && x.Id != entity.Id);
+            if (family != null)
+                return;
+
             dbContext.Entry(entity).State = EntityState.Modified;
         }
     }

@@ -23,7 +23,7 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Organization entity)
         {
-            var organization = Find(x => x.Id != entity.Id && x.Code == entity.Code);
+            var organization = Find(x => x.Code == entity.Code);
             if (organization != null)
                 return;
                 

@@ -23,6 +23,10 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Department entity)
         {
+            var department = Find(x => x.Name == entity.Name && x.FamilyOffering == entity.FamilyOffering);
+            if (department != null)
+                return;
+
             dbSet.Add(entity);
         }
 
@@ -80,6 +84,10 @@ namespace CSCTest.DAL.Repositories
 
         public void Update(Department entity)
         {
+            var department = Find(x => x.Name == entity.Name && x.FamilyOffering == entity.FamilyOffering && x.Id != entity.Id);
+            if (department != null)
+                return;
+                
             dbContext.Entry(entity).State = EntityState.Modified;
         }
     }
