@@ -63,6 +63,7 @@ namespace CSCTest.Api.Controllers
         /// </remarks>
         /// <param name="createOrganizationModel">Create Organization Model</param>  
         /// <response code="200">Orgnanization created successful</response>
+        /// <response code="400">Organization with the same name already exist</response>
         /// <response code="401">Unauthorized user</response> 
         /// <response code="500">Internal Server Error</response>
         [HttpPost]
@@ -86,7 +87,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="id">Id of organization</param>
         /// <param name="createOrganizationModel">Changed information about organization</param>
         /// <response code="200">Changed organization successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Organization with the same name already exist</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found organization</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]CreateOrganizationModel createOrganizationModel)
@@ -109,7 +112,8 @@ namespace CSCTest.Api.Controllers
         /// </remarks>
         /// <param name="id">Id of organization</param>
         /// <response code="200">Delete successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found organization</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

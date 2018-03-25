@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using CSCTest.DAL.Exceptions;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs.Countries;
+using CSCTest.Service.Infrastructure;
 
 namespace CSCTest.Service.Concrete
 {
@@ -28,13 +30,21 @@ namespace CSCTest.Service.Concrete
 
                 var organization = await organizationRepository.FindAsync(x => x.Id == organizationId && x.User.Email == email);
                 if (organization == null)
-                    return;
+                {
+                    throw new HttpStatusCodeException(404, $"Not found organization with id \"{organizationId}\" or user with email {email} don't have permisson to manage this organization");
+                }
 
                 var country = mapper.Map<CreateCountryDto, Country>(createCountryDto);
                 country.Organization = organization;
-                countryRepository.Add(country);
-
-                await unitOfWork.SaveAsync();
+                try
+                {
+                    countryRepository.Add(country);
+                    await unitOfWork.SaveAsync();
+                }
+                catch (DALException ex)
+                {
+                    throw new HttpStatusCodeException(400, ex.Message);
+                }
             }
         }
 
@@ -88,11 +98,21 @@ namespace CSCTest.Service.Concrete
 
                 var country = await countryRepository.FindAsync(x => x.Id == id && x.Organization.User.Email == email);
                 if (country == null)
-                    return;
+                {
+                    throw new HttpStatusCodeException(404, $"Not found country with id \"{id}\" or user with email {email} don't have permisson to manage this organization");
+                }
 
                 mapper.Map<CreateCountryDto, Country>(createCountryDto, country);
-                countryRepository.Update(country);
-                await unitOfWork.SaveAsync();
+
+                try
+                {
+                    countryRepository.Update(country);
+                    await unitOfWork.SaveAsync();
+                }
+                catch (DALException ex)
+                {
+                    throw new HttpStatusCodeException(400, ex.Message);
+                }
             }
         }
 
@@ -104,7 +124,9 @@ namespace CSCTest.Service.Concrete
 
                 var country = await countryRepository.FindAsync(x => x.Id == id && x.Organization.User.Email == email);
                 if (country == null)
-                    return;
+                {
+                    throw new HttpStatusCodeException(404, $"Not found country with id \"{id}\" or user with email {email} don't have permisson to manage this organization");
+                }
 
                 countryRepository.Delete(country);
                 await unitOfWork.SaveAsync();

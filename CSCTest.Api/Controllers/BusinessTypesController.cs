@@ -56,6 +56,7 @@ namespace CSCTest.Api.Controllers
         /// <returns>an IActionResult</returns>
         /// <param name="businessName">Name of business type</param> 
         /// <response code="200">Type of business created successful</response>
+        /// <response code="400">Type of business with the same name already exist</response>
         /// <response code="401">Unauthorized user</response> 
         /// <response code="500">Internal Server Error</response> 
         [HttpPost]
@@ -71,7 +72,8 @@ namespace CSCTest.Api.Controllers
         /// <param name="id">Id of type of business</param>
         /// <param name="name">New name for type of business</param>
         /// <response code="200">Changed type of business successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found type of business</response>
         /// <response code="500">Internal Server Error</response> 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]string name)

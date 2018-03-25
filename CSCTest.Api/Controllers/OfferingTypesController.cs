@@ -62,7 +62,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="familyTypeId">Id of type of family on which depend new type of offering</param>
         /// <param name="name">Name of offering type</param> 
         /// <response code="200">Type of offering created successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Type of offering with the same name and which depended on the same type of family already exist</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found type of family</response>
         /// <response code="500">Internal Server Error</response> 
         [HttpPost("~/api/family_types/{familyTypeId}/offering_types")]
         public async Task<IActionResult> Post(int familyTypeId, string name)
@@ -81,7 +83,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="id">Id of type of offering</param>
         /// <param name="name">New name for type of offering</param>
         /// <response code="200">Changed type of offering successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Type of offering with the same name and which depended on the same type of family already exist</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found type of offering</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]string name)

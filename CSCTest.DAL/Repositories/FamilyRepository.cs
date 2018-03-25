@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CSCTest.DAL.EF;
+using CSCTest.DAL.Exceptions;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -23,9 +24,11 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Family entity)
         {
-            var family = Find(x => x.Name == entity.Name && x.Business == entity.Business);
+            var family = Find(x => x.Name == entity.Name && x.BusinessId == entity.Business.Id);
             if (family != null)
-                return;
+            {
+                throw new DALException($"Type of family with the name {entity.Name} and depend on business {entity.Business.Name} exist");
+            }
 
             dbSet.Add(entity);
         }
@@ -94,9 +97,11 @@ namespace CSCTest.DAL.Repositories
 
         public void Update(Family entity)
         {
-            var family = Find(x => x.Name == entity.Name && x.Id != entity.Id);
+            var family = Find(x => x.Name == entity.Name && x.BusinessId == entity.Business.Id && x.Id != entity.Id);
             if (family != null)
-                return;
+            {
+                throw new DALException($"Type of family with the name {entity.Name} and depend on business {entity.Business.Name} exist");
+            }
 
             dbContext.Entry(entity).State = EntityState.Modified;
         }

@@ -77,7 +77,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="organizationId">Id of organization</param>
         /// <param name="createCountryModel">Create Country Model</param>  
         /// <response code="200">Country created successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Country already exist in organization</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found organization or user don't have permisson to manage this organization</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost("~/api/organizations/{organizationId}/countries")]
         public async Task<IActionResult> Post(int organizationId, [FromBody]CreateCountryModel createCountryModel)
@@ -101,7 +103,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="id">Id of country</param>
         /// <param name="createCountryModel">Changed data about country</param>
         /// <response code="200">Country updated successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Country already exist in organization</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found country</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]CreateCountryModel createCountryModel)
@@ -124,6 +128,7 @@ namespace CSCTest.Api.Controllers
         /// <param name="id">Id of country</param>
         /// <response code="200">Delete successful</response>
         /// <response code="401">Unauthorized user</response> 
+        /// <response code="404">Not Found country</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

@@ -23,10 +23,6 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(User entity)
         {
-            var user = Find(x => x.Email == entity.Email);
-            if (user != null)
-                return;
-
             dbSet.Add(entity);
         }
 

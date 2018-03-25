@@ -1,10 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using CSCTest.DAL.Exceptions;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs.Businesses;
+using CSCTest.Service.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace CSCTest.Service.Concrete
 {
@@ -29,7 +33,9 @@ namespace CSCTest.Service.Concrete
 
                 var country = await countryRepository.FindAsync(x => x.Id == countryId && x.Organization.User.Email == email);
                 if (country == null)
-                    return;
+                {
+                    throw new HttpStatusCodeException(404, $"Not found country with id \"{countryId}\" or user with email {email} don't have permisson to manage this organization");
+                }
 
                 var business = await businessRepository.FindAsync(x => x.Name == name);
                 if (business == null)
@@ -38,13 +44,19 @@ namespace CSCTest.Service.Concrete
                     businessRepository.Add(business);
                 }
 
-                countryBusinessRepository.Add(new CountryBusiness
+                try
                 {
-                    Country = country,
-                    Business = business
-                });
-
-                await unitOfWork.SaveAsync();
+                    countryBusinessRepository.Add(new CountryBusiness
+                    {
+                        Country = country,
+                        Business = business
+                    });
+                    await unitOfWork.SaveAsync();
+                }
+                catch (InvalidOperationException)
+                {
+                    throw new HttpStatusCodeException(400, "Business with name ${name} already exist in country {country.Name}");
+                }
             }
         }
 
@@ -94,7 +106,9 @@ namespace CSCTest.Service.Concrete
 
                 var business = await countryBusinessRepository.FindAsync(x => x.Id == id && x.Country.Organization.User.Email == email);
                 if (business == null)
-                    return;
+                {
+                    throw new HttpStatusCodeException(404, $"Not found business with id \"{id}\"");
+                }
 
                 countryBusinessRepository.Delete(business);
                 await unitOfWork.SaveAsync();
@@ -107,14 +121,15 @@ namespace CSCTest.Service.Concrete
             {
                 var businessRepository = unitOfWork.BussinessRepository;
 
-                var business = await businessRepository.FindAsync(x => x.Name == name);
-                if (business == null)
+                try
                 {
-                    business = new Business { Name = name };
-                    businessRepository.Add(business);
+                    businessRepository.Add(new Business { Name = name });
+                    await unitOfWork.SaveAsync();
                 }
-
-                await unitOfWork.SaveAsync();
+                catch (DALException ex)
+                {
+                    throw new HttpStatusCodeException(400, ex.Message);
+                }
             }
         }
 
@@ -126,7 +141,9 @@ namespace CSCTest.Service.Concrete
 
                 var business = await businessRepository.FindAsync(x => x.Id == id);
                 if (business == null)
-                    return null;
+                {
+                    throw new HttpStatusCodeException(404, $"Not found type of business with id \"{id}\"");
+                }
 
                 return mapper.Map<Business, BusinessTypeDto>(business);
             }
@@ -154,11 +171,21 @@ namespace CSCTest.Service.Concrete
 
                 var business = await businessRepository.FindAsync(x => x.Id == id);
                 if (business == null)
-                    return;
+                {
+                    throw new HttpStatusCodeException(404, $"Not found type of business with id \"{id}\"");
+                }
+
                 business.Name = name;
 
-                businessRepository.Update(business);
-                await unitOfWork.SaveAsync();
+                try
+                {
+                    businessRepository.Update(business);
+                    await unitOfWork.SaveAsync();
+                }
+                catch (DALException ex)
+                {
+                    throw new HttpStatusCodeException(400, ex.Message);
+                }
             }
         }
     }

@@ -36,7 +36,6 @@ namespace CSCTest.Tests.UnitTests.Services
                 Name = "Organization",
                 Code = "Org",
                 Type = organizationType.GetStringName()
-
             };
             var organizationService = new OrganizationService(new EFUnitOfWork(dbOptions), mapper);
 
@@ -93,23 +92,89 @@ namespace CSCTest.Tests.UnitTests.Services
             Mapper.Reset();
         }
 
+        [Fact]
+        public async void DeleteOrganizationAsync_CorrectParameters_SuccessDelete()
+        {
+            // Arrange
+            int organizationId;
+            var organizationCode = "UniqueOrg";
+            using (var unitOfWork = new EFUnitOfWork(dbOptions))
+            {
+                var user = unitOfWork.UserRepository.Find(x => x.Email == userEmail);
+                var organization = new Organization
+                {
+                    Name = "Unique Organization",
+                    Code = organizationCode,
+                    Type = OrganizationType.IncorporatedCompany,
+                    User = user
+                };
+                unitOfWork.OrganizationRepository.Add(organization);
+                unitOfWork.Save();
+                organizationId = organization.Id;
+            }
+            var organizationService = new OrganizationService(new EFUnitOfWork(dbOptions), mapper);
+
+            // Act
+            await organizationService.DeleteOrganizationAsync(organizationId, userEmail);
+
+            // Assert
+            using (var unitOfWork = new EFUnitOfWork(dbOptions))
+            {
+                var organizationRepository = unitOfWork.OrganizationRepository;
+                var organization = organizationRepository.Find(x => x.Code == organizationCode);
+                Assert.Null(organization);
+            }
+            Mapper.Reset();
+        }
+
+         [Fact]
+        public async void DeleteOrganizationAsync_ParametersWithNotOwnerEmail_NotDeleteOrganization()
+        {
+            // Arrange
+            int organizationId;
+            var organizationCode = "UniqueOrg";
+            using (var unitOfWork = new EFUnitOfWork(dbOptions))
+            {
+                var user = unitOfWork.UserRepository.Find(x => x.Email == userEmail);
+                var organization = new Organization
+                {
+                    Name = "Unique Organization",
+                    Code = organizationCode,
+                    Type = OrganizationType.IncorporatedCompany,
+                    User = user
+                };
+                unitOfWork.OrganizationRepository.Add(organization);
+                unitOfWork.Save();
+                organizationId = organization.Id;
+            }
+            var organizationService = new OrganizationService(new EFUnitOfWork(dbOptions), mapper);
+
+            // Act
+            await organizationService.DeleteOrganizationAsync(organizationId, "incorrect@gmail.com");
+
+            // Assert
+            using (var unitOfWork = new EFUnitOfWork(dbOptions))
+            {
+                var organizationRepository = unitOfWork.OrganizationRepository;
+                var organization = organizationRepository.Find(x => x.Code == organizationCode);
+                Assert.NotNull(organization);
+            }
+            Mapper.Reset();
+        }
+
         private void InitializeDb()
         {
             using (var unitOfWork = new EFUnitOfWork(dbOptions))
             {
                 var userRepository = unitOfWork.UserRepository;
-                var user = userRepository.Find(x => x.Email == userEmail);
-                if (user == null)
+                userRepository.Add(new User
                 {
-                    userRepository.Add(new User
-                    {
-                        Name = "Test",
-                        Surname = "Passed",
-                        Email = userEmail,
-                        Password = "pass"
-                    });
-                    unitOfWork.Save();
-                }
+                    Name = "Test",
+                    Surname = "Passed",
+                    Email = userEmail,
+                    Password = "pass"
+                });
+                unitOfWork.Save();
             }
         }
     }

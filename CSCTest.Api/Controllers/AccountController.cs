@@ -41,6 +41,7 @@ namespace CSCTest.Api.Controllers
         /// <remarks>Registration new customer</remarks>
         /// <param name="registrationUserCredentials">Customer registration model</param> 
         /// <response code="200">Registration successful</response>
+        /// <response code="400">User with thes same email exist</response>
         /// <response code="500">Internal Server Error</response> 
         [HttpPost("registration")]
         public async Task<IActionResult> RegisterUser([FromBody] RegistrationUserCredentials registrationUserCredentials)

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
+using CSCTest.DAL.Exceptions;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs.Departments;
+using CSCTest.Service.Infrastructure;
 
 namespace CSCTest.Service.Concrete
 {
@@ -31,14 +33,23 @@ namespace CSCTest.Service.Concrete
                     x.BusinessFamily.CountryBusiness.Country.Organization.User.Email == email
                 );
                 if (familyOffering == null)
-                    return;
-
-                departmentRepository.Add(new Department
                 {
-                    Name = departmentCreateDto.Name,
-                    FamilyOffering = familyOffering
-                });
-                await unitOfWork.SaveAsync();
+                    throw new HttpStatusCodeException(404, $"Not found offering with id \"{departmentCreateDto.OfferingId}\" or user with email {email} don't have permisson to manage this organization");
+                }
+
+                try
+                {
+                    departmentRepository.Add(new Department
+                    {
+                        Name = departmentCreateDto.Name,
+                        FamilyOffering = familyOffering
+                    });
+                    await unitOfWork.SaveAsync();
+                }
+                catch (DALException ex)
+                {
+                    throw new HttpStatusCodeException(400, ex.Message);
+                }
             }
         }
 
@@ -48,13 +59,15 @@ namespace CSCTest.Service.Concrete
             {
                 var departmentRepository = unitOfWork.DepartmentRepository;
 
-                var department = await departmentRepository.FindAsync(x => 
+                var department = await departmentRepository.FindAsync(x =>
                     x.Id == id &&
                     x.FamilyOffering.BusinessFamily.CountryBusiness.Country.Organization.User.Email == email
                 );
                 if (department == null)
-                    return;
-                
+                {
+                    throw new HttpStatusCodeException(404, $"Not found department with id \"{id}\" or user with email {email} don't have permisson to manage this organization");
+                }
+
                 departmentRepository.Delete(department);
                 await unitOfWork.SaveAsync();
             }
@@ -69,7 +82,7 @@ namespace CSCTest.Service.Concrete
                 var department = await departmentRepository.FindAsync(x => x.Id == id);
                 if (department == null)
                     return null;
-                
+
                 var departmentDto = mapper.Map<Department, DepartmentDto>(department);
                 return departmentDto;
             }
@@ -112,11 +125,21 @@ namespace CSCTest.Service.Concrete
                     x.FamilyOffering.BusinessFamily.CountryBusiness.Country.Organization.User.Email == email
                 );
                 if (department == null)
-                    return;
-                
+                {
+                    throw new HttpStatusCodeException(404, $"Not found department with id \"{id}\" or user with email {email} don't have permisson to manage this organization");
+                }
+
                 department.Name = name;
-                departmentRepository.Update(department);
-                await unitOfWork.SaveAsync();
+
+                try
+                {
+                    departmentRepository.Update(department);
+                    await unitOfWork.SaveAsync();
+                }
+                catch (DALException ex)
+                {
+                    throw new HttpStatusCodeException(400, ex.Message);
+                }
             }
         }
     }

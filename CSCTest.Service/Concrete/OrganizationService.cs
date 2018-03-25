@@ -7,6 +7,8 @@ using AutoMapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CSCTest.Service.DTOs.Organizations;
+using CSCTest.Service.Infrastructure;
+using CSCTest.DAL.Exceptions;
 
 namespace CSCTest.Service.Concrete
 {
@@ -32,9 +34,15 @@ namespace CSCTest.Service.Concrete
 
                 var organization = mapper.Map<OrganizationDto, Organization>(organizationDTO);
                 organization.User = user;
-                organizationRepository.Add(organization);
-
-                await unitOfWork.SaveAsync();
+                try
+                {
+                    organizationRepository.Add(organization);
+                    await unitOfWork.SaveAsync();
+                }
+                catch (DALException ex)
+                {
+                    throw new HttpStatusCodeException(400, ex.Message);
+                }
             }
         }
 
@@ -48,11 +56,13 @@ namespace CSCTest.Service.Concrete
                 var user = await userRepository.FindAsync(x => x.Email == email);
                 var organization = await organizationRepository.FindAsync(x => x.Id == id && x.UserId == user.Id);
 
-                if (organization != null)
+                if (organization == null)
                 {
-                    organizationRepository.Delete(organization);
-                    await unitOfWork.SaveAsync();
+                    throw new HttpStatusCodeException(404, $"Not found organization with id \"{id}\" or user with email {email} don't have permisson to manage this organization");
                 }
+
+                organizationRepository.Delete(organization);
+                await unitOfWork.SaveAsync();
             }
         }
 
@@ -92,11 +102,21 @@ namespace CSCTest.Service.Concrete
 
                 var organization = await organizationRepository.FindAsync(x => x.Id == id && x.User.Email == email);
                 if (organization == null)
-                    return;
+                {
+                    throw new HttpStatusCodeException(404, $"Not found organization with id \"{id}\" or user with email {email} don't have permisson to manage this organization");
+                }
 
                 mapper.Map<OrganizationDto, Organization>(organizationDto, organization);
-                organizationRepository.Update(organization);
-                await unitOfWork.SaveAsync();
+
+                try
+                {
+                    organizationRepository.Update(organization);
+                    await unitOfWork.SaveAsync();
+                }
+                catch (DALException ex)
+                {
+                    throw new HttpStatusCodeException(400, ex.Message);
+                }
             }
         }
     }

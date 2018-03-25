@@ -79,7 +79,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="countryId">Country's id, where create new business</param>
         /// <param name="businessName">Name of business type</param> 
         /// <response code="200">Business create successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Business with the same name already exist in country</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found country with or user don't have permisson to manage this organization</response>
         /// <response code="500">Internal Server Error</response> 
         [HttpPost("~/api/countries/{countryId}/businesses")]
         public async Task<IActionResult> Post(int countryId, [FromBody]string businessName)
@@ -97,7 +99,8 @@ namespace CSCTest.Api.Controllers
         /// </remarks>
         /// <param name="id">Id of business</param>
         /// <response code="200">Delete successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found business</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

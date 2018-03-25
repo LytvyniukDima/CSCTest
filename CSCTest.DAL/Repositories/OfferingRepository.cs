@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CSCTest.DAL.EF;
+using CSCTest.DAL.Exceptions;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -23,9 +24,11 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Offering entity)
         {
-            var offering = Find(x => x.Name == entity.Name && x.Family == entity.Family);
+            var offering = Find(x => x.Name == entity.Name && x.FamilyId == entity.Family.Id);
             if (offering != null)
-                return;
+            {
+                throw new DALException($"Type of offering with the name {entity.Name} and depend on fmaily {entity.Family.Name} exist");
+            }
 
             dbSet.Add(entity);
         }
@@ -89,9 +92,11 @@ namespace CSCTest.DAL.Repositories
 
         public void Update(Offering entity)
         {
-            var offering = Find(x => x.Name == entity.Name && x.Family == entity.Family && x.Id != entity.Id);
+            var offering = Find(x => x.Name == entity.Name && x.FamilyId == entity.Family.Id && x.Id != entity.Id);
             if (offering != null)
-                return;
+            {
+                throw new DALException($"Type of offering with the name {entity.Name} and depend on fmaily {entity.Family.Name} exist");
+            }
 
              dbContext.Entry(entity).State = EntityState.Modified;
         }

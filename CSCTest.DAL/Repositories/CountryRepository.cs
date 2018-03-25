@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CSCTest.DAL.EF;
+using CSCTest.DAL.Exceptions;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -23,9 +24,11 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Country entity)
         {
-            var country = Find(x => x.Code == entity.Code && x.Organization == entity.Organization);
+            var country = Find(x => x.Code == entity.Code && x.OrganizationId == entity.Organization.Id);
             if (country != null)
-                return;
+            {
+                throw new DALException($"Country with code {entity.Code} exist in organization {entity.Organization.Name}");
+            }
 
             dbSet.Add(entity);
         }
@@ -91,7 +94,9 @@ namespace CSCTest.DAL.Repositories
         {
             var country = Find(x => x.Id != entity.Id && x.Code == entity.Code && x.OrganizationId == entity.OrganizationId);
             if (country != null)
-                return;
+            {
+                throw new DALException($"Country with code {entity.Code} exist in organization {entity.Organization.Name}");
+            }
                 
             dbContext.Entry(entity).State = EntityState.Modified;
         }

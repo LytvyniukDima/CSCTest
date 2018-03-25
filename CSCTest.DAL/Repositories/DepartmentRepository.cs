@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CSCTest.DAL.EF;
+using CSCTest.DAL.Exceptions;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -23,9 +24,11 @@ namespace CSCTest.DAL.Repositories
 
         public void Add(Department entity)
         {
-            var department = Find(x => x.Name == entity.Name && x.FamilyOffering == entity.FamilyOffering);
+            var department = Find(x => x.Name == entity.Name && x.FamilyOfferingId == entity.FamilyOffering.Id);
             if (department != null)
-                return;
+            {
+                throw new DALException($"Department with the name {entity.Name} exist in Family {entity.FamilyOffering.Id}");
+            }
 
             dbSet.Add(entity);
         }
@@ -84,9 +87,11 @@ namespace CSCTest.DAL.Repositories
 
         public void Update(Department entity)
         {
-            var department = Find(x => x.Name == entity.Name && x.FamilyOffering == entity.FamilyOffering && x.Id != entity.Id);
+            var department = Find(x => x.Name == entity.Name && x.FamilyOfferingId == entity.FamilyOffering.Id && x.Id != entity.Id);
             if (department != null)
-                return;
+            {
+                throw new DALException($"Department with the name {entity.Name} exist in Family {entity.FamilyOffering.Id}");
+            }
                 
             dbContext.Entry(entity).State = EntityState.Modified;
         }

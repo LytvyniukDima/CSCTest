@@ -77,7 +77,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="offeringId">Id of offering</param>
         /// <param name="name">Name of department</param>  
         /// <response code="200">Department created successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Department already exist in offering</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found offering</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPost("~/api/offerings/{offeringId}/departments")]
         public async Task<IActionResult> Post(int offeringId, [FromBody]string name)
@@ -104,7 +106,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="id">Id of department</param>
         /// <param name="name">New name of department</param>
         /// <response code="200">Department updated successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Department already exist in offering</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found department</response>
         /// <response code="500">Internal Server Error</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]string name)
@@ -122,7 +126,8 @@ namespace CSCTest.Api.Controllers
         /// </remarks> 
         /// <param name="id">Id of department</param>
         /// <response code="200">Delete successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found department</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

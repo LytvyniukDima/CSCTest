@@ -79,7 +79,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="familyId">Family's id, where create new offering</param>
         /// <param name="offeringName">Name of type of offering</param> 
         /// <response code="200">Offering create successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Offering already exist in family</response> 
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found family</response>
         /// <response code="500">Internal Server Error</response> 
         [HttpPost("~/api/families/{familyId}/offerings")]
         public async Task<IActionResult> Post(int familyId, [FromBody]string offeringName)
@@ -97,7 +99,8 @@ namespace CSCTest.Api.Controllers
         /// </remarks>
         /// <param name="id">Id of offering</param>
         /// <response code="200">Delete successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found offering</response>
         /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)

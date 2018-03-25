@@ -62,7 +62,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="businessTypeId">Id of business type on which depend new type of family</param>
         /// <param name="name">Name of family type</param> 
         /// <response code="200">Type of family created successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Type of family depended the same business already exist</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found type of business</response> 
         /// <response code="500">Internal Server Error</response> 
         [HttpPost("~/api/business_types/{businessTypeId}/family_types")]
         public async Task<IActionResult> Post(int businessTypeId, [FromBody]string name)
@@ -80,7 +82,9 @@ namespace CSCTest.Api.Controllers
         /// <param name="id">Id of type of family</param>
         /// <param name="name">New name for type of family</param>
         /// <response code="200">Changed type of family successful</response>
-        /// <response code="401">Unauthorized user</response> 
+        /// <response code="400">Type of family depended the same business already exist</response>
+        /// <response code="401">Unauthorized user</response>
+        /// <response code="404">Not found type of business</response> 
         /// <response code="500">Internal Server Error</response> 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]string name)

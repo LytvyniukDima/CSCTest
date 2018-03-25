@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using CSCTest.DAL.EF;
+using CSCTest.DAL.Exceptions;
 using CSCTest.Data.Abstract;
 using CSCTest.Data.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -25,8 +26,10 @@ namespace CSCTest.DAL.Repositories
         {
             var business = Find(x => x.Name == entity.Name);
             if (business != null)
-                return;
-                
+            {
+                throw new DALException($"Business type with the name {entity.Name} exist");
+            }
+
             dbSet.Add(entity);
         }
 
@@ -91,8 +94,10 @@ namespace CSCTest.DAL.Repositories
         {
             var business = Find(x => x.Name == entity.Name && x.Id != entity.Id);
             if (business != null)
-                return;
-                
+            {
+                throw new DALException($"Business type with the name {entity.Name} exist");
+            }
+
             dbContext.Entry(entity).State = EntityState.Modified;
         }
     }

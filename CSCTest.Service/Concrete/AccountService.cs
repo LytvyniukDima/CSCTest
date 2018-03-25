@@ -9,6 +9,7 @@ using CSCTest.Data.Entities;
 using CSCTest.Service.Abstract;
 using CSCTest.Service.DTOs.Users;
 using CSCTest.Service.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -56,8 +57,15 @@ namespace CSCTest.Service.Concrete
             {
                 var userRepository = unitOfWork.UserRepository;
                 var user = mapper.Map<UserRegistrationDto, User>(userRegistrationDto);
+                try
+                {
                 userRepository.Add(user);
                 await unitOfWork.SaveAsync();
+                }
+                catch (DbUpdateException)
+                {
+                    throw new HttpStatusCodeException(400, $"User with email {userRegistrationDto} exist");
+                }
             }
         }
 
