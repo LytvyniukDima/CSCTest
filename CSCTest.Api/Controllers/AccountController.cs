@@ -19,6 +19,13 @@ namespace CSCTest.Api.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>User Log In</summary>
+        /// <returns>Return JWT token</returns>
+        /// <remarks>Login user and generate JWT token</remarks>
+        /// <param name="loginCredentials">Login model</param> 
+        /// <response code="200">Log In successful</response>
+        /// <response code="400">Invalid username or password</response> 
+        /// <response code="500">Internal Server Error</response> 
         [HttpPost("token")]
         public async Task<IActionResult> GetToken([FromBody] LoginCredentials loginCredentials)
         {
@@ -29,6 +36,12 @@ namespace CSCTest.Api.Controllers
             return Ok(new { access_token = token});
         }
 
+        /// <summary>Register new user</summary>
+        /// <returns>an IActionResult</returns>
+        /// <remarks>Registration new customer</remarks>
+        /// <param name="registrationUserCredentials">Customer registration model</param> 
+        /// <response code="200">Registration successful</response>
+        /// <response code="500">Internal Server Error</response> 
         [HttpPost("registration")]
         public async Task<IActionResult> RegisterUser([FromBody] RegistrationUserCredentials registrationUserCredentials)
         {

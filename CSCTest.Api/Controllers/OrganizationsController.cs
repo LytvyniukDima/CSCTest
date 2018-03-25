@@ -22,6 +22,10 @@ namespace CSCTest.Api.Controllers
             this.mapper = mapper;
         }
 
+        /// <summary>Get all organizations</summary>
+        /// <returns>Array with information about all organizations</returns>
+        /// <response code="200">Get organizations successful</response> 
+        /// <response code="500">Internal Server Error</response> 
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -33,6 +37,12 @@ namespace CSCTest.Api.Controllers
             return Ok(organizationViewModels);
         }
 
+        /// <summary>Get organization by id</summary>
+        /// <returns>Information about organization</returns>
+        /// <param name="id">Id of orgnization</param>
+        /// <response code="200">Get organization successful</response>
+        /// <response code="404">Not found organization with this id</response>
+        /// <response code="500">Internal Server Error</response> 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -46,6 +56,15 @@ namespace CSCTest.Api.Controllers
             return Ok(organizationViewModel);
         }
 
+        /// <summary>Create new organization</summary>
+        /// <returns>an IActionResult</returns>
+        /// <remarks>
+        /// Create new organization and set user that create organization like owner of organization
+        /// </remarks>
+        /// <param name="createOrganizationModel">Create Organization Model</param>  
+        /// <response code="200">Orgnanization created successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response>
         [HttpPost]
         public async Task <IActionResult> Post([FromBody]CreateOrganizationModel createOrganizationModel)
         {
@@ -59,7 +78,16 @@ namespace CSCTest.Api.Controllers
             return Ok();
         }
 
-        // PUT api/values/5
+        /// <summary>Update organizatiom by id</summary>
+        /// <returns>an IActionResult</returns>
+        ///  <remarks>
+        /// Only owner of organization can update it.
+        /// </remarks>
+        /// <param name="id">Id of organization</param>
+        /// <param name="createOrganizationModel">Changed information about organization</param>
+        /// <response code="200">Changed organization successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]CreateOrganizationModel createOrganizationModel)
         {
@@ -74,11 +102,15 @@ namespace CSCTest.Api.Controllers
             return Ok();
         }
 
-        /// <summary>
-        /// Delete Country
-        /// </summary>
-        /// <remarks>Delete country by id.</remarks>
-        /// <param name="id"></param>
+        /// <summary>Delete organization by id</summary>
+        /// <returns>an IActionResult</returns>
+        /// <remarks>
+        /// Delete Organization can only owner
+        /// </remarks>
+        /// <param name="id">Id of organization</param>
+        /// <response code="200">Delete successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

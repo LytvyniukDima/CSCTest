@@ -22,7 +22,7 @@ namespace CSCTest.Api
                     var context = services.GetRequiredService<CSCDbContext>();
                     DbInitializer.Initialize(context);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     
                 }

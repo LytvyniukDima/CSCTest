@@ -22,14 +22,10 @@ namespace CSCTest.Api.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post([FromBody]string businessName)
-        {
-            await businessService.AddBusinessTypeAsync(businessName);
-
-            return Ok();
-        }
-
+        /// <summary>Get all types of businesses</summary>
+        /// <returns>Array with information about all types of business</returns>
+        /// <response code="200">Get type of business successful</response> 
+        /// <response code="500">Internal Server Error</response>
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -39,6 +35,12 @@ namespace CSCTest.Api.Controllers
             return Ok(mapper.Map<IEnumerable<BusinessTypeDto>, IEnumerable<BusinessTypeViewModel>>(businessTypes));
         }
 
+        /// <summary>Get type of business by id</summary>
+        /// <returns>Information about type of business</returns>
+        /// <param name="id">Id of type of business</param>
+        /// <response code="200">Get type of business successful</response>
+        /// <response code="404">Not found type of business with this id</response>
+        /// <response code="500">Internal Server Error</response> 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -49,7 +51,28 @@ namespace CSCTest.Api.Controllers
 
             return Ok(mapper.Map<BusinessTypeDto, BusinessTypeViewModel>(businessType));
         }
+        
+        /// <summary>Create a new type of business</summary>
+        /// <returns>an IActionResult</returns>
+        /// <param name="businessName">Name of business type</param> 
+        /// <response code="200">Type of business created successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response> 
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody]string businessName)
+        {
+            await businessService.AddBusinessTypeAsync(businessName);
 
+            return Ok();
+        }
+
+        /// <summary>Update type of business by id</summary>
+        /// <returns>an IActionResult</returns>
+        /// <param name="id">Id of type of business</param>
+        /// <param name="name">New name for type of business</param>
+        /// <response code="200">Changed type of business successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response> 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]string name)
         {

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\CSCTestComments.xml</DocumentationFile>
+    <noWarn>1591</noWarn>
   </PropertyGroup>
 
   <ItemGroup>

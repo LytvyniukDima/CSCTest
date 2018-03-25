@@ -22,18 +22,10 @@ namespace CSCTest.Api.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost("~/api/family_types/{familyTypeId}/offering_types")]
-        public async Task<IActionResult> Post(int familyTypeId, string name)
-        {
-            await offeringService.AddOfferingTypeAsync(new OfferingTypeCreateDto
-            {
-                Name = name,
-                FamilyTypeId = familyTypeId
-            });
-
-            return Ok();
-        }
-
+        /// <summary>Get all types of offerings</summary>
+        /// <returns>Array with information about all types of offerings</returns>
+        /// <response code="200">Get type of offering successful</response> 
+        /// <response code="500">Internal Server Error</response>
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -44,6 +36,12 @@ namespace CSCTest.Api.Controllers
             return Ok(offerings);
         }
 
+        /// <summary>Get type of offering by id</summary>
+        /// <returns>Information about type of offering</returns>
+        /// <param name="id">Id of type of offering</param>
+        /// <response code="200">Get type of offering successful</response>
+        /// <response code="404">Not found type of offering with this id</response>
+        /// <response code="500">Internal Server Error</response> 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -56,6 +54,35 @@ namespace CSCTest.Api.Controllers
             return Ok(offering);
         }
 
+        /// <summary>Create a new type of offering</summary>
+        /// <remarks>
+        /// Create a new type of offering which depend on concrete type of family
+        /// </remarks>
+        /// <returns>an IActionResult</returns>
+        /// <param name="familyTypeId">Id of type of family on which depend new type of offering</param>
+        /// <param name="name">Name of offering type</param> 
+        /// <response code="200">Type of offering created successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response> 
+        [HttpPost("~/api/family_types/{familyTypeId}/offering_types")]
+        public async Task<IActionResult> Post(int familyTypeId, string name)
+        {
+            await offeringService.AddOfferingTypeAsync(new OfferingTypeCreateDto
+            {
+                Name = name,
+                FamilyTypeId = familyTypeId
+            });
+
+            return Ok();
+        }
+        
+        /// <summary>Update type of offering by id</summary>
+        /// <returns>an IActionResult</returns>
+        /// <param name="id">Id of type of offering</param>
+        /// <param name="name">New name for type of offering</param>
+        /// <response code="200">Changed type of offering successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody]string name)
         {

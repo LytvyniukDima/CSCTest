@@ -22,15 +22,26 @@ namespace CSCTest.Api.Controllers
             this.mapper = mapper;
         }
 
-        [HttpPost("~/api/countries/{countryId}/businesses")]
-        public async Task<IActionResult> Post(int countryId, [FromBody]string businessName)
+        /// <summary>Get all businesses</summary>
+        /// <returns>Array with information about all businesses</returns>
+        /// <response code="200">Get businesses successful</response> 
+        /// <response code="500">Internal Server Error</response> 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            string email = User.Identity.Name;
+            var businesses = await businessService.GetBusinessesAsync();
+            var businessViewModels = mapper.Map<IEnumerable<BusinessDto>, IEnumerable<BusinessViewModel>>(businesses);
 
-            await businessService.AddBusiness(countryId, businessName, email);
-            return Ok();
+            return Ok(businessViewModels);
         }
 
+        /// <summary>Get business by id</summary>
+        /// <returns>Information about business</returns>
+        /// <param name="id">Id of business</param>
+        /// <response code="200">Get business successful</response>
+        /// <response code="404">Not found business with this id</response>
+        /// <response code="500">Internal Server Error</response> 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -43,19 +54,14 @@ namespace CSCTest.Api.Controllers
             return Ok(businessViewModel);
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            var businesses = await businessService.GetBusinessesAsync();
-            var businessViewModels = mapper.Map<IEnumerable<BusinessDto>, IEnumerable<BusinessViewModel>>(businesses);
-
-            return Ok(businessViewModels);
-        }
-
+        /// <summary>Get all businesses in concrete country</summary>
+        /// <returns>Array with information about businesses in concrete country</returns>
+        /// <param name="countryId">Id of country</param>
+        /// <response code="200">Get countries successful</response> 
+        /// <response code="500">Internal Server Error</response>
         [AllowAnonymous]
         [HttpGet("~/api/countries/{countryId}/businesses")]
-        public async Task<IActionResult> GetCountryBusiness(int countryId)
+        public IActionResult GetCountryBusiness(int countryId)
         {
             var businesses = businessService.GetCountryBusinesses(countryId);
             var businessViewModels = mapper.Map<IEnumerable<BusinessDto>, IEnumerable<BusinessViewModel>>(businesses);
@@ -63,6 +69,36 @@ namespace CSCTest.Api.Controllers
             return Ok(businessViewModels);
         }
         
+        /// <summary>Create a business inside country</summary>
+        /// <returns>an IActionResult</returns>
+        /// <remarks>
+        /// Create a business iside a country. If business name doesn't exist 
+        /// in business types, will be created new business type.
+        /// Only owner of organization can create new business.
+        /// </remarks>
+        /// <param name="countryId">Country's id, where create new business</param>
+        /// <param name="businessName">Name of business type</param> 
+        /// <response code="200">Business create successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response> 
+        [HttpPost("~/api/countries/{countryId}/businesses")]
+        public async Task<IActionResult> Post(int countryId, [FromBody]string businessName)
+        {
+            string email = User.Identity.Name;
+
+            await businessService.AddBusiness(countryId, businessName, email);
+            return Ok();
+        }
+
+        /// <summary>Delete business by id</summary>
+        /// <returns>an IActionResult</returns>
+        /// <remarks>
+        /// Delete Business can only owner of organization
+        /// </remarks>
+        /// <param name="id">Id of business</param>
+        /// <response code="200">Delete successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

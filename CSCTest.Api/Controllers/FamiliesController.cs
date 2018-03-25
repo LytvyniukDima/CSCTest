@@ -21,16 +21,27 @@ namespace CSCTest.Api.Controllers
             this.familyService = familyService;
             this.mapper = mapper;
         }
-
-        [HttpPost("~/api/businesses/{businessId}/families")]
-        public async Task<IActionResult> Post(int businessId, [FromBody]string familyName)
+        
+        /// <summary>Get all families</summary>
+        /// <returns>Array with information about all families</returns>
+        /// <response code="200">Get families successful</response> 
+        /// <response code="500">Internal Server Error</response> 
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Get()
         {
-            string email = User.Identity.Name;
+            IEnumerable<FamilyDto> families = await familyService.GetFamiliesAsync();
+            var familyViewModels = mapper.Map<IEnumerable<FamilyDto>, IEnumerable<FamilyViewModel>>(families);
 
-            await familyService.AddFamilyAsync(businessId, familyName, email);
-            return Ok();
+            return Ok(familyViewModels);
         }
 
+        /// <summary>Get family by id</summary>
+        /// <returns>Information about family</returns>
+        /// <param name="id">Id of family</param>
+        /// <response code="200">Get family successful</response>
+        /// <response code="404">Not found family with this id</response>
+        /// <response code="500">Internal Server Error</response> 
         [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
@@ -43,26 +54,51 @@ namespace CSCTest.Api.Controllers
             return Ok(familyViewModel);
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            IEnumerable<FamilyDto> families = await familyService.GetFamiliesAsync();
-            var familyViewModels = mapper.Map<IEnumerable<FamilyDto>, IEnumerable<FamilyViewModel>>(families);
-
-            return Ok(familyViewModels);
-        }
-
+        /// <summary>Get all families in concrete business</summary>
+        /// <returns>Array with information about families in concrete business</returns>
+        /// <param name="businessId">Id of business</param>
+        /// <response code="200">Get families successful</response> 
+        /// <response code="500">Internal Server Error</response>
         [AllowAnonymous]
         [HttpGet("~/api/businesses/{businessId}/families")]
-        public async Task<IActionResult> GetBusinessFamiles(int businessId)
+        public IActionResult GetBusinessFamiles(int businessId)
         {
             IEnumerable<FamilyDto> families = familyService.GetBusinessFamilies(businessId);
             var familyViewModels = mapper.Map<IEnumerable<FamilyDto>, IEnumerable<FamilyViewModel>>(families);
 
             return Ok(familyViewModels);
         }
+        
+        /// <summary>Create a family inside business</summary>
+        /// <returns>an IActionResult</returns>
+        /// <remarks>
+        /// Create a family iside business. If family name doesn't exist in 
+        /// families types, will be created new family type.
+        /// Only owner of organization can create new family.
+        /// </remarks>
+        /// <param name="businessId">Business's id, where create new family</param>
+        /// <param name="familyName">Name type of family</param> 
+        /// <response code="200">Family create successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response> 
+        [HttpPost("~/api/businesses/{businessId}/families")]
+        public async Task<IActionResult> Post(int businessId, [FromBody]string familyName)
+        {
+            string email = User.Identity.Name;
 
+            await familyService.AddFamilyAsync(businessId, familyName, email);
+            return Ok();
+        }
+        
+        /// <summary>Delete family by id</summary>
+        /// <returns>an IActionResult</returns>
+        /// <remarks>
+        /// Delete Fmily can only owner of organization
+        /// </remarks>
+        /// <param name="id">Id of family</param>
+        /// <response code="200">Delete successful</response>
+        /// <response code="401">Unauthorized user</response> 
+        /// <response code="500">Internal Server Error</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
