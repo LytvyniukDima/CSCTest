@@ -53,8 +53,7 @@ namespace CSCTest.Service.Concrete
                 var organizationRepository = unitOfWork.OrganizationRepository;
                 var userRepository = unitOfWork.UserRepository;
 
-                var user = await userRepository.FindAsync(x => x.Email == email);
-                var organization = await organizationRepository.FindAsync(x => x.Id == id && x.UserId == user.Id);
+                var organization = await organizationRepository.FindAsync(x => x.Id == id && x.User.Email == email);
 
                 if (organization == null)
                 {
