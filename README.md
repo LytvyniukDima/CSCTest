@@ -215,5 +215,5 @@ To get concrete department use GET request for route /api/departments/{id} where
 To get department in concrete offering use GET request for route /api/offerings/{offeringId}/departments where parameter offeringId is Id of offering which departments user want to get.   
 ## Frontend
 To see the tree you should navigate to port where angular server is listening on your computer. By default angular server is listening on localhost:4200.  
-On home page you will see tree like that:
+On home page you will see tree like that:  
 ![Tree](https://github.com/LytvyniukDima/CSCTest/blob/master/ReadMeImages/Tree.PNG)  
