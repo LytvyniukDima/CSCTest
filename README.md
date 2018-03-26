@@ -66,7 +66,11 @@ After that you need to copy only token without quotes. For our example:
 ```text
   eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoic3RyaW5nIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiY3VzdG9tZXIiLCJuYmYiOjE1MjIwNDUwMjAsImV4cCI6MTUyMjA0ODYyMCwiaXNzIjoiQ1NDVGVzdCIsImF1ZCI6Imh0dHA6Ly9sb2NhbGhvc3Q6NTAwMC8ifQ.ktnDaZmje3fP9dU5jmjAf-aTMHTJ83ERkFKZF8q_EBU
 ```
-Finally click on button Authorize:
+After that click on button Authorize:
+![Authorize button](https://github.com/LytvyniukDima/CSCTest/blob/master/ReadMeImages/AuthorizeButton.PNG)  
+Finally input in field Value: "Bearer {token}. For example:
+![Input token](https://github.com/LytvyniukDima/CSCTest/blob/master/ReadMeImages/InputToken.PNG)
+
 ### Organizations
 ### Countries
 ### Businesses
