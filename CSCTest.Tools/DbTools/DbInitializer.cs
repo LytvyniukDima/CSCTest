@@ -17,8 +17,8 @@ namespace CSCTest.Tools.DbTools
 
             var users = new User[]
             {
-                new User { Name = "Michael", Surname = "Jackson", Email = "michael@gmail.com", Address = "Indiana", Password = "root"},
-                new User { Name = "Arnold", Surname = "Schwarzenegger", Email = "arnold@gmail.com", Address = "Los Angeles", Password = "root"}
+                new User { Name = "Michael", Surname = "Jackson", Email = "michael@gmail.com", Address = "Indiana", Password = "password"},
+                new User { Name = "Arnold", Surname = "Schwarzenegger", Email = "arnold@gmail.com", Address = "Los Angeles", Password = "password"}
             };
             foreach (var user in users)
             {
