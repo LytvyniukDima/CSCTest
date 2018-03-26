@@ -25,6 +25,7 @@ namespace CSCTest.Tests.UnitTests.Services
             this.dbOptions = new DbContextOptionsBuilder<CSCDbContext>()
                 .UseInMemoryDatabase(databaseName: "CSCTest_Tests_OrganizationService")
                 .Options;
+            Mapper.Reset();
             Mapper.Initialize(x => x.AddProfile(new MappingProfile()));
             this.mapper = Mapper.Instance;
             this.InitializeDb();
