@@ -20,7 +20,7 @@ namespace CSCTest.Api.Infrastructure
                     Contact = new Contact { Name = "Dima Lytvyniuk" }
                 });
                 
-                s.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "CSCTestComments.xml"));
+                // s.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "CSCTestComments.xml"));
                 
                 s.AddSecurityDefinition("Bearer", new ApiKeyScheme
                 {
